@@ -1,74 +1,86 @@
-import { StyleSheet,TouchableOpacity } from 'react-native';
+import { StyleSheet,TouchableOpacity,Button } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
-import React, { useState, useEffect } from 'react';
-import { Gyroscope } from 'expo-sensors';
-
+import React, { useRef,useState, useEffect } from 'react';
+import { Orientation } from 'expo-orientation-sensor'
+import { Audio } from 'expo-av';
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
-  const [data, setData] = useState({
-    x: 0,
-    y: 0,
-    z: 0,
-  });
-  const [subscription, setSubscription] = useState(null);
 
-  const _slow = () => {
-    Gyroscope.setUpdateInterval(1000);
-  };
+  const sound = useRef(new Audio.Sound());
 
-  const _fast = () => {
-    Gyroscope.setUpdateInterval(16);
-  };
+  const [angles, setAngles] = useState({
+    yaw: 0,
+    pitch: 0,
+    roll: 0,
+  })
+  useEffect(() => {
+    const subscriber = Orientation.addListener(data => {
+      setAngles(data)
 
-  const _subscribe = () => {
-    setSubscription(
-        Gyroscope.addListener(gyroscopeData => {
-          setData(gyroscopeData);
-        })
-    );
-  };
+      if (Math.abs(((data.pitch * 180) / Math.PI)) < 160) {
+        console.log("xxxx")
+        playSound().then(r => {})
+      }
+    })
 
-  const _unsubscribe = () => {
-    subscription && subscription.remove();
-    setSubscription(null);
-  };
+
+    return () => {
+      subscriber.remove()
+    }
+  }, [])
+
+
+
 
   useEffect(() => {
-    _subscribe();
-    return () => _unsubscribe();
+    return () => sound.current.unloadAsync();
   }, []);
 
-  const { x, y, z } = data;
+  const playSound = async () => {
+    console.log("Loading Sound");
+
+    await sound.current.createAsync(require("../assets/beep.mp3"));
+
+    console.log("playing sound");
+
+    const checkLoaded = await sound.current.getStatusAsync();
+    if (checkLoaded.isLoaded === true) {
+      console.log("Error in Loading mp3");
+    } else {
+      await sound.current.playAsync();
+    }
+  };
 
   return (
-      <View style={styles.container}>
-        <Text style={styles.text}>Gyroscope:</Text>
-        <Text style={styles.text}>
-          x: {round(x)} y: {round(y)} z: {round(z)}
-        </Text>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={subscription ? _unsubscribe : _subscribe} style={styles.button}>
-            <Text>{subscription ? 'On' : 'Off'}</Text>
+      <View style={styles.screen}>
+        <View style={styles.dataContainer}>
+          <TouchableOpacity onPress={() => playSound()}>
+            <Button title="arrow-left"   />
           </TouchableOpacity>
-          <TouchableOpacity onPress={_slow} style={[styles.button, styles.middleButton]}>
-            <Text>Slow</Text>
+
+          <TouchableOpacity onPress={() => playSound()}>
+            <Button title="arrow-right"  />
           </TouchableOpacity>
-          <TouchableOpacity onPress={_fast} style={styles.button}>
-            <Text>Fast</Text>
-          </TouchableOpacity>
+          <View style={styles.container}>
+            <Text style={styles.text}>Pitch: </Text>
+            <Text style={styles.text}>
+              {((angles.pitch * 180) / Math.PI).toFixed(0)}
+            </Text>
+          </View>
+          <View style={styles.container}>
+            <Text style={styles.text}>Roll: </Text>
+            <Text style={styles.text}>
+              {((angles.roll * 180) / Math.PI).toFixed(0)}
+            </Text>
+          </View>
         </View>
       </View>
-  );
+  )
 }
-function round(n) {
-  if (!n) {
-    return 0;
-  }
-  return Math.floor(n * 100) / 100;
-}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -87,21 +99,15 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
   },
-  buttonContainer: {
+  dataContainer: {
     flexDirection: 'row',
-    alignItems: 'stretch',
-    marginTop: 15,
-  },
-  button: {
-    flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-    backgroundColor: '#eee',
-    padding: 10,
   },
-  middleButton: {
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderColor: '#ccc',
+  screen: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
