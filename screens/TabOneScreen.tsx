@@ -1,69 +1,101 @@
-import { StyleSheet,TouchableOpacity,Button } from 'react-native';
+import {StyleSheet, TouchableOpacity, Button, AppState} from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
-import React, { useRef,useState, useEffect } from 'react';
+import React, {useState} from 'react';
 import { Orientation } from 'expo-orientation-sensor'
 import { Audio } from 'expo-av';
 
+
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
 
-  const sound = useRef(new Audio.Sound());
 
-  const [angles, setAngles] = useState({
+
+  const [appState, setAppState] = useState(AppState.currentState);
+  const [sound, setSound] = React.useState();
+  const [play, setPlay] = React.useState({
+    play: false
+  });
+  const [angles, setAngles] = React.useState({
     yaw: 0,
     pitch: 0,
     roll: 0,
   })
-  useEffect(() => {
+
+
+  const handleAppStateChange = (state: any) => {
+    setAppState(state);
+   // setPlay(state);
+    console.log('xxxxxxxxxx');
+  }
+
+
+  async function playSound() {
+    //console.log('xxxxxxxxxx');
+
+    //console.log(play);
+    // if(play){
+      console.log('Loading Sound');
+      const { sound } = await Audio.Sound.createAsync(
+          require('../assets/beep.mp3')
+      );
+      //
+      setSound(sound);
+      //
+      console.log('Playing Sound');
+      await sound.playAsync();
+    //
+    // } else {
+    //  // await sound.unloadAsync();
+    // }
+
+
+  }
+
+  React.useEffect(() => {
     const subscriber = Orientation.addListener(data => {
       setAngles(data)
 
+     // console.log(play)
       if (Math.abs(((data.pitch * 180) / Math.PI)) < 160) {
-        console.log("xxxx")
-        playSound().then(r => {})
+      //  console.log("xxxx")
+        //console.log("set to true")
+        setPlay(true)
+        //playSound()
+       // playSound().then(r => {})
+      }else{
+        if(play){
+          //console.log("set to false")
+          setPlay(false)
+        }
+
+       // playSound()
+        //playSound().then(r => {})
+
       }
-    })
 
-
-    return () => {
-      subscriber.remove()
     }
-  }, [])
+    )
+
+    AppState.addEventListener('change', handleAppStateChange);
+
+    return sound
+        ? () => {
+          console.log('Unloading Sound');
+          sound.unloadAsync();
+          subscriber.remove()
+          AppState.removeEventListener('change', handleAppStateChange);
+          }
+        : undefined;
+  }, [sound]);
 
 
-
-
-  useEffect(() => {
-    return () => sound.current.unloadAsync();
-  }, []);
-
-  const playSound = async () => {
-    console.log("Loading Sound");
-
-    await sound.current.createAsync(require("../assets/beep.mp3"));
-
-    console.log("playing sound");
-
-    const checkLoaded = await sound.current.getStatusAsync();
-    if (checkLoaded.isLoaded === true) {
-      console.log("Error in Loading mp3");
-    } else {
-      await sound.current.playAsync();
-    }
-  };
 
   return (
       <View style={styles.screen}>
         <View style={styles.dataContainer}>
-          <TouchableOpacity onPress={() => playSound()}>
-            <Button title="arrow-left"   />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => playSound()}>
-            <Button title="arrow-right"  />
-          </TouchableOpacity>
+          <Button title= {!play?"OK":"Warn"} onPress={playSound} />
           <View style={styles.container}>
             <Text style={styles.text}>Pitch: </Text>
             <Text style={styles.text}>
