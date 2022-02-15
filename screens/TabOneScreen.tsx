@@ -3,99 +3,96 @@ import {StyleSheet, TouchableOpacity, Button, AppState} from 'react-native';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
-import React, {useState} from 'react';
+import React, {useState,useRef} from 'react';
 import { Orientation } from 'expo-orientation-sensor'
 import { Audio } from 'expo-av';
 
-
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [playbackObject, setPlaybackObject] = useState(new Audio.Sound());
+    const [playbackStatus, setPlaybackStatus] = useState(null);
 
+    const appState = useRef(AppState.currentState);
+    const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
-
-  const [appState, setAppState] = useState(AppState.currentState);
-  const [sound, setSound] = React.useState();
-  const [play, setPlay] = React.useState({
-    play: false
-  });
   const [angles, setAngles] = React.useState({
-    yaw: 0,
+    //yaw: 0,
     pitch: 0,
     roll: 0,
   })
 
-
-  const handleAppStateChange = (state: any) => {
-    setAppState(state);
-   // setPlay(state);
-    console.log('xxxxxxxxxx');
-  }
-
-
-  async function playSound() {
-    //console.log('xxxxxxxxxx');
-
-    //console.log(play);
-    // if(play){
-      console.log('Loading Sound');
-      const { sound } = await Audio.Sound.createAsync(
-          require('../assets/beep.mp3')
-      );
-      //
-      setSound(sound);
-      //
-      console.log('Playing Sound');
-      await sound.playAsync();
-    //
-    // } else {
-    //  // await sound.unloadAsync();
-    // }
-
-
-  }
-
   React.useEffect(() => {
-    const subscriber = Orientation.addListener(data => {
-      setAngles(data)
+      AppState.addEventListener('change', _handleAppStateChange);
 
-     // console.log(play)
-      if (Math.abs(((data.pitch * 180) / Math.PI)) < 160) {
-      //  console.log("xxxx")
-        //console.log("set to true")
-        setPlay(true)
-        //playSound()
-       // playSound().then(r => {})
-      }else{
-        if(play){
-          //console.log("set to false")
-          setPlay(false)
+          playbackObject.loadAsync(require("../assets/beep.mp3")).then(r => {
+                if(r.isLoaded){
+                    setPlaybackStatus(r);
+                }
+
+              playbackObject.setIsLoopingAsync(true).then(rl => {
+                  if(rl.isLoaded){
+                      Orientation.setUpdateInterval(200)
+                      const subscriber = Orientation.addListener(data => {
+                              setAngles(data)
+                              if (Math.abs(((data.pitch * 180) / Math.PI)) < 160) {
+                                  setIsPlaying(true);
+                              }else{
+                                  setIsPlaying(false);
+                              }
+
+                          }
+                      )
+                  }
+
+              });
+          });
+
+
+
+
+
+
+      //let timer = setInterval(() => console.log('fire!'), 1000);
+
+    return  () => {
+              //subscriber.remove()
+        console.log('Unloading Sound');
+        if (playbackObject !== null && playbackStatus === null) {
+            playbackObject.unloadAsync();
+        }
+        AppState.removeEventListener('change', _handleAppStateChange);
+        //clearInterval(timer)
+          };
+  }, []);
+
+    const _handleAppStateChange = nextAppState => {
+        if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+            console.log('App has come to the foreground!');
         }
 
-       // playSound()
-        //playSound().then(r => {})
+        appState.current = nextAppState;
+        setAppStateVisible(appState.current);
+        console.log('AppState', appState.current);
+    };
 
-      }
+    const pause = async () => {
+        const status = await playbackObject.pauseAsync();
+        return setPlaybackStatus(status);
+    };
 
-    }
-    )
 
-    AppState.addEventListener('change', handleAppStateChange);
-
-    return sound
-        ? () => {
-          console.log('Unloading Sound');
-          sound.unloadAsync();
-          subscriber.remove()
-          AppState.removeEventListener('change', handleAppStateChange);
-          }
-        : undefined;
-  }, [sound]);
-
+    const play = async () => {
+            const status = await playbackObject.playAsync();
+            return setPlaybackStatus(status);
+    };
 
 
   return (
-      <View style={styles.screen}>
+      <View style={isPlaying?styles.screen2:styles.screen}>
         <View style={styles.dataContainer}>
-          <Button title= {!play?"OK":"Warn"} onPress={playSound} />
+          <Button title= {isPlaying.toString()} onPress={play} />
+            <Button title=">" onPress={play} />
+            <Button title="||" onPress={pause} />
           <View style={styles.container}>
             <Text style={styles.text}>Pitch: </Text>
             <Text style={styles.text}>
@@ -118,6 +115,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+
   },
   title: {
     fontSize: 20,
@@ -135,11 +133,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
+
   },
   screen: {
     flex: 1,
-    backgroundColor: '#fff',
+      backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
   },
+    screen2: {
+        flex: 1,
+        backgroundColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 });
