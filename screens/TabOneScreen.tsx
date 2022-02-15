@@ -4,10 +4,10 @@ import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 import React, {useState,useRef} from 'react';
-import { Orientation } from 'expo-orientation-sensor'
-import { Audio } from 'expo-av';
+import { Orientation, Subscription} from 'expo-orientation-sensor'
+import {Audio} from 'expo-av';
 
-export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [playbackObject, setPlaybackObject] = useState(new Audio.Sound());
     const [playbackStatus, setPlaybackStatus] = useState(null);
@@ -15,13 +15,14 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
     const appState = useRef(AppState.currentState);
     const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
-  const [angles, setAngles] = React.useState({
-    //yaw: 0,
-    pitch: 0,
-    roll: 0,
-  })
+    const [angles, setAngles] = React.useState({
+        pitch: 0,
+        roll: 0,
+    })
+    const ref = React.useRef(false);
+    React.useEffect(() => {
 
-  React.useEffect(() => {
+        let subscriber: Subscription
       AppState.addEventListener('change', _handleAppStateChange);
 
           playbackObject.loadAsync(require("../assets/beep.mp3")).then(r => {
@@ -31,39 +32,33 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
 
               playbackObject.setIsLoopingAsync(true).then(rl => {
                   if(rl.isLoaded){
-                      Orientation.setUpdateInterval(200)
-                      const subscriber = Orientation.addListener(data => {
+                      Orientation.setUpdateInterval(500)
+                       subscriber = Orientation.addListener(data => {
                               setAngles(data)
                               if (Math.abs(((data.pitch * 180) / Math.PI)) < 160) {
                                   setIsPlaying(true);
+                                  play()
                               }else{
                                   setIsPlaying(false);
+                                  pause()
                               }
-
                           }
                       )
                   }
-
               });
           });
-
-
-
-
-
-
-      //let timer = setInterval(() => console.log('fire!'), 1000);
-
     return  () => {
-              //subscriber.remove()
-        console.log('Unloading Sound');
+        subscriber.remove()
         if (playbackObject !== null && playbackStatus === null) {
+            console.log('Unloading Sound');
             playbackObject.unloadAsync();
         }
         AppState.removeEventListener('change', _handleAppStateChange);
-        //clearInterval(timer)
           };
   }, []);
+
+
+
 
     const _handleAppStateChange = nextAppState => {
         if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
