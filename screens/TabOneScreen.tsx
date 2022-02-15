@@ -1,4 +1,4 @@
-import {AppState, Button, StyleSheet} from 'react-native';
+import {AppState, Button, StyleSheet, Vibration} from 'react-native';
 import {Text, View} from '../components/Themed';
 import {RootTabScreenProps} from '../types';
 import React, {useRef, useState} from 'react';
@@ -35,6 +35,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                             if (cal(data)) {
                                 setIsPlaying(true);
                                 play().then(r => {
+                                    Vibration.vibrate(500)
                                 })
                             } else {
                                 setIsPlaying(false);
