@@ -6,7 +6,7 @@ import {Orientation, Subscription} from 'expo-orientation-sensor'
 import {Audio} from 'expo-av';
 
 export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
-    const [sidePic, setSidePic] = useState("../assets/images/side/side-0.png");
+    const [sidePic, setSidePic] = useState(require('../assets/images/side/side-0.png'));
     const [isPlaying, setIsPlaying] = useState(false);
     const [playbackObject, setPlaybackObject] = useState(new Audio.Sound());
     const [playbackStatus, setPlaybackStatus] = useState(null);
@@ -18,6 +18,9 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
         pitch: 0,
         roll: 0,
     })
+    const side0 = require('../assets/images/side/side-0.png');
+    const side10 = require('../assets/images/side/side-10.png');
+    const side20 = require('../assets/images/side/side-20.png');
 
     React.useEffect(() => {
         let subscriber: Subscription
@@ -30,13 +33,13 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 
             playbackObject.setIsLoopingAsync(true).then(rl => {
                 if (rl.isLoaded) {
-                    Orientation.setUpdateInterval(500)
+                    Orientation.setUpdateInterval(1000)
                     subscriber = Orientation.addListener(data => {
                             setAngles(data)
                             if (cal(data)) {
                                 setIsPlaying(true);
                                 play().then(r => {
-                                    Vibration.vibrate(500)
+                                   // Vibration.vibrate(10)
                                 })
                             } else {
                                 setIsPlaying(false);
@@ -62,11 +65,15 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     function cal(data) {
         let roll = ((data.roll * 180) / Math.PI)
 
-           // if (roll<10||roll>=-10) {
-           //     setSidePic("../assets/images/side/side-10.png")
-           // }
+           if (roll <= 10 && roll >=-10) {
+               setSidePic(side0)
+           }else if(roll<-10 && roll>=-20){
+               setSidePic(side10)
+           }else if(roll<-20 && roll>=-45){
+               setSidePic(side20)
+           }
 
-        return Math.abs(((data.pitch * 180) / Math.PI)) < 160 || Math.abs(roll) > 20
+        return Math.abs(((data.pitch * 180) / Math.PI)) < 120 || Math.abs(roll) > 45
     }
 
     const _handleAppStateChange = nextAppState => {
@@ -90,11 +97,10 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
         return setPlaybackStatus(status);
     };
 
-
     return (
             <View style={styles.container}>
                 <View style={{ flex: 1,  alignContent: 'center'}}>
-                    <Image style={styles.stretch} source={require("../assets/images/side/side-0.png")} resizeMethod={"scale"}/>
+                    <Image style={styles.stretch} source={sidePic} resizeMethod={"scale"}/>
                 </View>
 
                     <View style={{ flex: 1, backgroundColor: "red" }}>
@@ -106,10 +112,6 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                     <View style={{ flex: 1, backgroundColor: "darkorange" }}>
 
                         <View>
-                            <Text style={styles.text}>sidePic: </Text>
-                            <Text style={styles.text}>
-                                {sidePic}
-                            </Text>
                             <Text style={styles.text}>Pitch: </Text>
                             <Text style={styles.text}>
                                 {((angles.pitch * 180) / Math.PI).toFixed(0)}
