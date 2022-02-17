@@ -1,4 +1,4 @@
-import {AppState, Button, StyleSheet, Vibration} from 'react-native';
+import {AppState, Button, StyleSheet, Vibration,Image} from 'react-native';
 import {Text, View} from '../components/Themed';
 import {RootTabScreenProps} from '../types';
 import React, {useRef, useState} from 'react';
@@ -6,6 +6,7 @@ import {Orientation, Subscription} from 'expo-orientation-sensor'
 import {Audio} from 'expo-av';
 
 export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
+    const [sidePic, setSidePic] = useState("../assets/images/side/side-0.png");
     const [isPlaying, setIsPlaying] = useState(false);
     const [playbackObject, setPlaybackObject] = useState(new Audio.Sound());
     const [playbackStatus, setPlaybackStatus] = useState(null);
@@ -59,7 +60,13 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 
 
     function cal(data) {
-        return Math.abs(((data.pitch * 180) / Math.PI)) < 160 || Math.abs(((data.roll * 180) / Math.PI)) > 20
+        let roll = ((data.roll * 180) / Math.PI)
+
+           // if (roll<10||roll>=-10) {
+           //     setSidePic("../assets/images/side/side-10.png")
+           // }
+
+        return Math.abs(((data.pitch * 180) / Math.PI)) < 160 || Math.abs(roll) > 20
     }
 
     const _handleAppStateChange = nextAppState => {
@@ -85,35 +92,43 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 
 
     return (
-        <View style={isPlaying ? styles.screen2 : styles.screen}>
-            <View style={styles.dataContainer}>
-                <Button title={isPlaying.toString()} onPress={play}/>
-                <Button title=">" onPress={play}/>
-                <Button title="||" onPress={pause}/>
-                <View style={styles.container}>
-                    <Text style={styles.text}>Pitch: </Text>
-                    <Text style={styles.text}>
-                        {((angles.pitch * 180) / Math.PI).toFixed(0)}
-                    </Text>
+            <View style={styles.container}>
+                <View style={{ flex: 1,  alignContent: 'center'}}>
+                    <Image style={styles.stretch} source={require("../assets/images/side/side-0.png")} resizeMethod={"scale"}/>
                 </View>
-                <View style={styles.container}>
-                    <Text style={styles.text}>Roll: </Text>
-                    <Text style={styles.text}>
-                        {((angles.roll * 180) / Math.PI).toFixed(0)}
-                    </Text>
-                </View>
+
+                    <View style={{ flex: 1, backgroundColor: "red" }}>
+
+                        <Button title={isPlaying.toString()} onPress={play}/>
+                        <Button title=">" onPress={play}/>
+                        <Button title="||" onPress={pause}/>
+                    </View>
+                    <View style={{ flex: 1, backgroundColor: "darkorange" }}>
+
+                        <View>
+                            <Text style={styles.text}>sidePic: </Text>
+                            <Text style={styles.text}>
+                                {sidePic}
+                            </Text>
+                            <Text style={styles.text}>Pitch: </Text>
+                            <Text style={styles.text}>
+                                {((angles.pitch * 180) / Math.PI).toFixed(0)}
+                            </Text>
+                        </View>
+                        <View>
+                            <Text style={styles.text}>Roll: </Text>
+                            <Text style={styles.text}>
+                                {((angles.roll * 180) / Math.PI).toFixed(0)}
+                            </Text>
+                        </View>
+
+                    </View>
             </View>
-        </View>
+
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-
-    },
     title: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -126,22 +141,20 @@ const styles = StyleSheet.create({
     text: {
         textAlign: 'center',
     },
-    dataContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-
+    container: {
+        flex: 1,
+        flexDirection: 'column',
     },
     screen: {
-        flex: 1,
         backgroundColor: 'white',
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     screen2: {
-        flex: 1,
         backgroundColor: 'red',
-        alignItems: 'center',
-        justifyContent: 'center',
+    },
+    stretch: {
+        width: 420,
+        height: 140,
+        resizeMode: 'stretch',
+        alignSelf: 'center',
     },
 });
