@@ -18,10 +18,19 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
         pitch: 0,
         roll: 0,
     })
-    const side0 = require('../assets/images/side/side-0.png');
-    const side10 = require('../assets/images/side/side-10.png');
-    const side20 = require('../assets/images/side/side-20.png');
 
+    const side10 = require('../assets/images/side/side10.png');
+    const side20 = require('../assets/images/side/side20.png');
+    const side45 = require('../assets/images/side/side45.png');
+    const side70 = require('../assets/images/side/side70.png');
+    const side90 = require('../assets/images/side/side90.png');
+
+    const side0 = require('../assets/images/side/side-0.png');
+    const side_10 = require('../assets/images/side/side-10.png');
+    const side_20 = require('../assets/images/side/side-20.png');
+    const side_45 = require('../assets/images/side/side-45.png');
+    const side_70 = require('../assets/images/side/side-70.png');
+    const side_90 = require('../assets/images/side/side-90.png');
     React.useEffect(() => {
         let subscriber: Subscription
         AppState.addEventListener('change', _handleAppStateChange);
@@ -33,13 +42,13 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 
             playbackObject.setIsLoopingAsync(true).then(rl => {
                 if (rl.isLoaded) {
-                    Orientation.setUpdateInterval(1000)
+                    Orientation.setUpdateInterval(500)
                     subscriber = Orientation.addListener(data => {
                             setAngles(data)
                             if (cal(data)) {
                                 setIsPlaying(true);
                                 play().then(r => {
-                                   // Vibration.vibrate(10)
+                                    Vibration.vibrate(10)
                                 })
                             } else {
                                 setIsPlaying(false);
@@ -65,14 +74,29 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     function cal(data) {
         let roll = ((data.roll * 180) / Math.PI)
 
-           if (roll <= 10 && roll >=-10) {
+           if (roll <= 5 && roll >=-5) {
                setSidePic(side0)
+           }else if(roll<-5 && roll>=-10){
+               setSidePic(side_10)
            }else if(roll<-10 && roll>=-20){
-               setSidePic(side10)
+               setSidePic(side_20)
            }else if(roll<-20 && roll>=-45){
+               setSidePic(side_45)
+           }else if(roll<-45 && roll>=-70){
+               setSidePic(side_70)
+           }else if(roll<-70 && roll>=-90){
+               setSidePic(side_90)
+           }else if(roll>5 && roll<=10){
+               setSidePic(side10)
+           }else if(roll>10 && roll<=20){
                setSidePic(side20)
+           }else if(roll>20 && roll<=45){
+               setSidePic(side45)
+           }else if(roll>45 && roll<=70){
+               setSidePic(side70)
+           }else if(roll>70 && roll<=90){
+               setSidePic(side90)
            }
-
         return Math.abs(((data.pitch * 180) / Math.PI)) < 120 || Math.abs(roll) > 45
     }
 
