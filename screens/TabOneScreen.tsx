@@ -1,4 +1,4 @@
-import {AppState, Button, StyleSheet, Vibration,Image} from 'react-native';
+import {AppState, Button, StyleSheet, Vibration, Image, Platform} from 'react-native';
 import {Text, View} from '../components/Themed';
 import {RootTabScreenProps} from '../types';
 import React, {useRef, useState} from 'react';
@@ -42,13 +42,13 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 
             playbackObject.setIsLoopingAsync(true).then(rl => {
                 if (rl.isLoaded) {
-                    Orientation.setUpdateInterval(500)
+                    Orientation.setUpdateInterval(100)
                     subscriber = Orientation.addListener(data => {
                             setAngles(data)
                             if (cal(data)) {
                                 setIsPlaying(true);
                                 play().then(r => {
-                                    Vibration.vibrate(10)
+                                    Vibration.vibrate(50)
                                 })
                             } else {
                                 setIsPlaying(false);
@@ -97,7 +97,12 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
            }else if(roll>70 && roll<=90){
                setSidePic(side90)
            }
-        return Math.abs(((data.pitch * 180) / Math.PI)) < 120 || Math.abs(roll) > 45
+
+        if(Platform.OS=="android"){
+            return Math.abs(roll) > 45
+        }else{
+            return Math.abs(((data.pitch * 180) / Math.PI)) < 120 || Math.abs(roll) > 45
+        }
     }
 
     const _handleAppStateChange = nextAppState => {
@@ -126,13 +131,6 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                 <View style={{ flex: 1,  alignContent: 'center'}}>
                     <Image style={styles.stretch} source={sidePic} resizeMethod={"scale"}/>
                 </View>
-
-                    <View style={{ flex: 1, backgroundColor: "red" }}>
-
-                        <Button title={isPlaying.toString()} onPress={play}/>
-                        <Button title=">" onPress={play}/>
-                        <Button title="||" onPress={pause}/>
-                    </View>
                     <View style={{ flex: 1, backgroundColor: "darkorange" }}>
 
                         <View>
