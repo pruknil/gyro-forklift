@@ -1,9 +1,10 @@
-import {AppState, Button, StyleSheet, Vibration, Image, Platform} from 'react-native';
+import {AppState, StyleSheet, Vibration, Image, Platform} from 'react-native';
 import {Text, View} from '../components/Themed';
 import {RootTabScreenProps} from '../types';
 import React, {useRef, useState} from 'react';
 import {Orientation, Subscription} from 'expo-orientation-sensor'
 import {Audio} from 'expo-av';
+import {AspectRatio, Box, Center, Heading, NativeBaseProvider, Stack, HStack} from "native-base";
 
 export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
     const [sidePic, setSidePic] = useState(require('../assets/images/side/side-0.png'));
@@ -127,9 +128,43 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     };
 
     return (
-            <View style={styles.container}>
+            <NativeBaseProvider style={styles.container}>
                 <View style={{ flex: 1,  alignContent: 'center'}}>
                     <Image style={styles.stretch} source={sidePic} resizeMethod={"scale"}/>
+                    <Box alignItems="center">
+                        <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
+                            borderColor: "coolGray.600",
+                            backgroundColor: "gray.700"
+                        }} _web={{
+                            shadow: 2,
+                            borderWidth: 0
+                        }} _light={{
+                            backgroundColor: "gray.50"
+                        }}>
+                            <Box>
+                                <AspectRatio w="100%" ratio={16 / 9}>
+                                    <Image  style={styles.stretch} source={sidePic} resizeMethod={"scale"} />
+                                </AspectRatio>
+                                <Center bg="violet.500" _dark={{
+                                    bg: "violet.400"
+                                }} _text={{
+                                    color: "warmGray.50",
+                                    fontWeight: "700",
+                                    fontSize: "xs"
+                                }} position="absolute" bottom="0" px="3" py="1.5">
+                                    {((angles.roll * 180) / Math.PI).toFixed(0)}
+                                </Center>
+                            </Box>
+
+                        </Box>
+                    </Box>
+
+
+
+
+
+
+
                 </View>
                     <View style={{ flex: 1, backgroundColor: "darkorange" }}>
 
@@ -147,7 +182,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                         </View>
 
                     </View>
-            </View>
+            </NativeBaseProvider>
 
     )
 }
