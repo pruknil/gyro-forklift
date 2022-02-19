@@ -62,7 +62,10 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
             });
         });
         return () => {
-            subscriber.remove()
+
+            if(subscriber !== undefined){
+                subscriber.remove()
+            }
             if (playbackObject !== null && playbackStatus === null) {
                 // console.log('Unloading Sound');
                 playbackObject.unloadAsync();
@@ -74,7 +77,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 
     function cal(data) {
         let roll = ((data.roll * 180) / Math.PI)
-
+        let pitch =((data.pitch * 180) / Math.PI)
            if (roll <= 5 && roll >=-5) {
                setSidePic(side0)
            }else if(roll<-5 && roll>=-10){
@@ -100,9 +103,9 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
            }
 
         if(Platform.OS=="android"){
-            return Math.abs(roll) > 45
+            return Math.abs(pitch) > 45 || Math.abs(roll) > 45
         }else{
-            return Math.abs(((data.pitch * 180) / Math.PI)) < 120 || Math.abs(roll) > 45
+            return Math.abs(pitch) < 120 || Math.abs(roll) > 45
         }
     }
 
@@ -130,9 +133,8 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     return (
             <NativeBaseProvider style={styles.container}>
                 <View style={{ flex: 1,  alignContent: 'center'}}>
-                    <Image style={styles.stretch} source={sidePic} resizeMethod={"scale"}/>
                     <Box alignItems="center">
-                        <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
+                        <Box maxW="full" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
                             borderColor: "coolGray.600",
                             backgroundColor: "gray.700"
                         }} _web={{
@@ -142,9 +144,8 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                             backgroundColor: "gray.50"
                         }}>
                             <Box>
-                                <AspectRatio w="100%" ratio={16 / 9}>
-                                    <Image  style={styles.stretch} source={sidePic} resizeMethod={"scale"} />
-                                </AspectRatio>
+
+                                <Image  style={styles.stretch} source={sidePic} resizeMethod={"scale"} />
                                 <Center bg="violet.500" _dark={{
                                     bg: "violet.400"
                                 }} _text={{
