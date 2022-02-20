@@ -183,7 +183,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                             backgroundColor: "gray.50"
                         }}>
                             <Box>
-                                <Image  style={{height:140,width:350}} source={sidePic} resizeMethod={"scale"} />
+                                <Image  style={{height:140,width:350,resizeMode: 'stretch'}} source={sidePic} resizeMethod={"scale"} />
                                 <Center bg="violet.500" _dark={{
                                     bg: "violet.400"
                                 }} _text={{
@@ -196,13 +196,6 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                             </Box>
                         </Box>
                     </Box>
-
-
-
-
-
-
-
                 </View>
                 <View style={{ flex: 3,  alignContent: 'center'}}>
 
@@ -217,7 +210,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                             backgroundColor: "gray.50"
                         }}>
                             <Box  >
-                                <Image style={{height:500,resizeMode: 'stretch'}} source={backPic} resizeMethod={"scale"} />
+                                <Image style={{height:350,width:150,resizeMode: 'stretch'}} source={backPic} resizeMethod={"scale"} />
                                 <Center bg="violet.500" _dark={{
                                     bg: "violet.400"
                                 }} _text={{
@@ -230,13 +223,6 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                             </Box>
                         </Box>
                     </Box>
-
-
-
-
-
-
-
                 </View>
 
             </NativeBaseProvider>
@@ -245,15 +231,6 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 }
 
 const styles = StyleSheet.create({
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
-    },
     text: {
         textAlign: 'center',
     },
@@ -261,14 +238,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
     },
-    screen: {
-        backgroundColor: 'white',
-    },
-    screen2: {
-        backgroundColor: 'red',
-    },
     stretch: {
-
         alignSelf: 'center',
     },
 });
