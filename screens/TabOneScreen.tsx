@@ -116,36 +116,38 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
            }else if(roll>70 && roll<=90){
                setSidePic(side90)
            }
-
-
-        if (pitch <= 5 && pitch >=-5) {
+        let chkpitch = pitch;
+        if(Platform.OS=="ios"){
+            if(chkpitch>=0){
+                chkpitch = chkpitch - 180;
+            }else{
+                chkpitch = chkpitch + 180;
+            }
+        }
+        if (chkpitch <= 5 && chkpitch >=-5) {
             setBackPic(back0)
-        }else if(pitch<-5 && pitch>=-10){
+        }else if(chkpitch<-5 && chkpitch>=-10){
             setBackPic(back_10)
-        }else if(pitch<-10 && pitch>=-20){
+        }else if(chkpitch<-10 && chkpitch>=-20){
             setBackPic(back_20)
-        }else if(pitch<-20 && pitch>=-45){
+        }else if(chkpitch<-20 && chkpitch>=-45){
             setBackPic(back_45)
-        }else if(pitch<-45 && pitch>=-70){
+        }else if(chkpitch<-45 && chkpitch>=-70){
             setBackPic(back_70)
-        }else if(pitch<-70 && pitch>=-90){
+        }else if(chkpitch<-70 && chkpitch>=-90){
             setBackPic(back_90)
-        }else if(pitch>5 && pitch<=10){
+        }else if(chkpitch>5 && chkpitch<=10){
             setBackPic(back10)
-        }else if(pitch>10 && pitch<=20){
+        }else if(chkpitch>10 && chkpitch<=20){
             setBackPic(back20)
-        }else if(pitch>20 && pitch<=45){
+        }else if(chkpitch>20 && chkpitch<=45){
             setBackPic(back45)
-        }else if(pitch>45 && pitch<=70){
+        }else if(chkpitch>45 && chkpitch<=70){
             setBackPic(back70)
-        }else if(pitch>70 && pitch<=90){
+        }else if(chkpitch>70 && chkpitch<=90){
             setBackPic(back90)
         }
-        if(Platform.OS=="android"){
-            return Math.abs(pitch) > 45 || Math.abs(roll) > 45
-        }else{
-            return Math.abs(pitch) < 120 || Math.abs(roll) > 45
-        }
+        return Math.abs(chkpitch) > 45 || Math.abs(roll) > 45
     }
 
     const _handleAppStateChange = nextAppState => {
