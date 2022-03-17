@@ -1,10 +1,10 @@
 import {AppState, StyleSheet, Vibration, Image, Platform} from 'react-native';
-import {Text, View} from '../components/Themed';
+import { View} from '../components/Themed';
 import {RootTabScreenProps} from '../types';
 import React, {useRef, useState} from 'react';
 import {Orientation, Subscription} from 'expo-orientation-sensor'
 import {Audio} from 'expo-av';
-import {AspectRatio, Box, Center, Heading, NativeBaseProvider, Stack, HStack} from "native-base";
+import { Box, Center, Button, NativeBaseProvider,Switch,Text} from "native-base";
 
 export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
     const [sidePic, setSidePic] = useState(require('../assets/images/side/side-0.png'));
@@ -12,7 +12,13 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     const [isPlaying, setIsPlaying] = useState(false);
     const [playbackObject, setPlaybackObject] = useState(new Audio.Sound());
     const [playbackStatus, setPlaybackStatus] = useState(null);
+    const [switchValue, setSwitchValue] = useState(false);
 
+    const toggleSwitch = (value) => {
+        //To handle switch toggle
+        setSwitchValue(value);
+        //State changes according to switch
+    };
     const appState = useRef(AppState.currentState);
     const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
@@ -61,7 +67,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                     Orientation.setUpdateInterval(100)
                     subscriber = Orientation.addListener(data => {
                             setAngles(data)
-                            if (cal(data)) {
+                            if (cal(data) && switchValue) {
                                 setIsPlaying(true);
                                 play().then(r => {
                                     Vibration.vibrate(50)
@@ -77,17 +83,18 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
             });
         });
         return () => {
-
             if(subscriber !== undefined){
+              //  console.log('Unloading Orientation');
                 subscriber.remove()
             }
-            if (playbackObject !== null && playbackStatus === null) {
-                // console.log('Unloading Sound');
-                playbackObject.unloadAsync();
-            }
+            // if (playbackObject !== null && playbackStatus === null) {
+            //
+            // }
+            //console.log('Unloading Sound');
+            playbackObject.unloadAsync();
             AppState.removeEventListener('change', _handleAppStateChange);
         };
-    }, []);
+    }, [switchValue]);
 
 
     function cal(data) {
@@ -173,7 +180,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 
     return (
             <NativeBaseProvider style={styles.container}>
-                <View style={{ flex: 1,  alignContent: 'center'}}>
+                <View style={{ flex: 2,  alignContent: 'center'}}>
                     <Box alignItems="center">
                         <Box maxW="full" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
                             borderColor: "coolGray.600",
@@ -199,10 +206,10 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                         </Box>
                     </Box>
                 </View>
-                <View style={{ flex: 3,  alignContent: 'center'}}>
+                <View style={{ flex: 5,  alignContent: 'center'}}>
 
                     <Box alignItems="center" >
-                        <Box maxW="full" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
+                        <Box maxW="full" rounded="lg" overflow="scroll" borderColor="coolGray.200" borderWidth="1" _dark={{
                             borderColor: "coolGray.600",
                             backgroundColor: "gray.700"
                         }} _web={{
@@ -226,7 +233,19 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                         </Box>
                     </Box>
                 </View>
+                <View style={{ flex: 1}}>
+                    <Box alignItems="center" >
+                        <Text>
+                        {switchValue ? 'Switch is ON' : 'Switch is OFF'}
+                    </Text>
 
+                        <Switch
+                            style={{marginTop: 30}}
+                            onValueChange={toggleSwitch}
+                            value={switchValue}
+                        />
+                    </Box>
+                </View>
             </NativeBaseProvider>
 
     )
