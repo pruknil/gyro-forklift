@@ -236,7 +236,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                 <View style={{ flex: 1}}>
                     <Box alignItems="center" >
                         <Text>
-                        {switchValue ? 'Switch is ON' : 'Switch is OFF'}
+                        {switchValue ? 'Detection ON' : 'Detection OFF'}
                     </Text>
 
                         <Switch
