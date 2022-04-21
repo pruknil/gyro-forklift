@@ -5,6 +5,7 @@ import React, {useRef, useState} from 'react';
 import {Orientation, Subscription} from 'expo-orientation-sensor'
 import {Audio} from 'expo-av';
 import { Box, Center, Button, NativeBaseProvider,Switch,Text} from "native-base";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
     const [sidePic, setSidePic] = useState(require('../assets/images/side/side-0.png'));
@@ -27,27 +28,27 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
         roll: 0,
     })
 
-    const side10 = require('../assets/images/side/side10.png');
-    const side20 = require('../assets/images/side/side20.png');
-    const side45 = require('../assets/images/side/side45.png');
+    const side10 = require('../assets/images/side/side20.png');
+    const side20 = require('../assets/images/side/side45.png');
+    const side45 = require('../assets/images/side/side60.png');
     const side70 = require('../assets/images/side/side70.png');
     const side90 = require('../assets/images/side/side90.png');
     const side0 = require('../assets/images/side/side-0.png');
-    const side_10 = require('../assets/images/side/side-10.png');
-    const side_20 = require('../assets/images/side/side-20.png');
-    const side_45 = require('../assets/images/side/side-45.png');
+    const side_10 = require('../assets/images/side/side-20.png');
+    const side_20 = require('../assets/images/side/side-45.png');
+    const side_45 = require('../assets/images/side/side-60.png');
     const side_70 = require('../assets/images/side/side-70.png');
     const side_90 = require('../assets/images/side/side-90.png');
 
-    const back10 =  require('../assets/images/back/back10.png');
-    const back20 =  require('../assets/images/back/back20.png');
-    const back45 =  require('../assets/images/back/back45.png');
+    const back10 =  require('../assets/images/back/back20.png');
+    const back20 =  require('../assets/images/back/back45.png');
+    const back45 =  require('../assets/images/back/back60.png');
     const back70 =  require('../assets/images/back/back70.png');
     const back90 =  require('../assets/images/back/back90.png');
     const back0 =   require('../assets/images/back/back0.png');
-    const back_10 = require('../assets/images/back/back-10.png');
-    const back_20 = require('../assets/images/back/back-20.png');
-    const back_45 = require('../assets/images/back/back-45.png');
+    const back_10 = require('../assets/images/back/back-20.png');
+    const back_20 = require('../assets/images/back/back-45.png');
+    const back_45 = require('../assets/images/back/back-60.png');
     const back_70 = require('../assets/images/back/back-70.png');
     const back_90 = require('../assets/images/back/back-90.png');
 
@@ -65,10 +66,11 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
             playbackObject.setIsLoopingAsync(true).then(rl => {
                 if (rl.isLoaded) {
                     Orientation.setUpdateInterval(100)
-                    subscriber = Orientation.addListener(data => {
+                    subscriber = Orientation.addListener(async data => {
                             setAngles(data)
                             if (cal(data) && switchValue) {
                                 setIsPlaying(true);
+                                await AsyncStorage.setItem('forklift', JSON.stringify(data))
                                 play().then(r => {
                                     Vibration.vibrate(50)
                                 })
