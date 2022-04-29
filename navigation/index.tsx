@@ -87,10 +87,10 @@ function BottomTabNavigator() {
       <BottomTab.Screen
         name="TabTwo"
         component={TabTwoScreen}
-        options={{
-          title: 'Config',
-          tabBarIcon: ({ color }) => <TabBarIcon name="id-card" color={color} />,
-        }}
+        options={({ navigation }: RootTabScreenProps<'TabTwo'>) => ({
+            title: 'Config',
+            tabBarIcon: ({ color }) => <TabBarIcon name="id-card" color={color} />,
+        })}
       />
     </BottomTab.Navigator>
   );
