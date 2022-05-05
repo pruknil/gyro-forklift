@@ -6,6 +6,7 @@ import {Orientation, Subscription} from 'expo-orientation-sensor'
 import {Audio} from 'expo-av';
 import { Box, Center, Button, NativeBaseProvider,Switch,Text} from "native-base";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
 
 export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
     const [sidePic, setSidePic] = useState(require('../assets/images/side/side-0.png'));
@@ -65,12 +66,21 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 
             playbackObject.setIsLoopingAsync(true).then(rl => {
                 if (rl.isLoaded) {
-                    Orientation.setUpdateInterval(100)
+                    Orientation.setUpdateInterval(200)
                     subscriber = Orientation.addListener(async data => {
                             setAngles(data)
                             if (cal(data) && switchValue) {
+
                                 setIsPlaying(true);
+
+                                AsyncStorage.getItem("forklift").then((value) => {
+                                    console.log('data is'+value);
+                                }).then(res => {
+
+                               });
+
                                 await AsyncStorage.setItem('forklift', JSON.stringify(data))
+
                                 play().then(r => {
                                     Vibration.vibrate(50)
                                 })
