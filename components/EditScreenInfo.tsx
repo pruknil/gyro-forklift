@@ -1,43 +1,62 @@
 import * as WebBrowser from 'expo-web-browser';
-import {AsyncStorage, StyleSheet, TouchableOpacity} from 'react-native';
+import { StyleSheet, TouchableOpacity} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Colors from '../constants/Colors';
 import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
+import * as React from "react";
+import {NativeBaseProvider,Slider, Stack} from 'native-base';
 
 export default function EditScreenInfo({ path }: { path: string }) {
-  return (
-      <View>
-        <View style={styles.getStartedContainer}>
-          <Text
-              style={styles.getStartedText}
-              lightColor="rgba(0,0,0,0.8)"
-              darkColor="rgba(255,255,255,0.8)">
-            Open up the code for this screen:
-          </Text>
 
-          <View
-              style={[styles.codeHighlightContainer, styles.homeScreenFilename]}
-              darkColor="rgba(255,255,255,0.05)"
-              lightColor="rgba(0,0,0,0.05)">
-            <MonoText>{path}</MonoText>
+  const [onChangeValueX, setOnChangeValueX] = React.useState(45);
+  const [onChangeEndValueX, setOnChangeEndValueX] = React.useState(45);
+
+  const [onChangeValueY, setOnChangeValueY] = React.useState(45);
+  const [onChangeEndValueY, setOnChangeEndValueY] = React.useState(45);
+
+  return (
+      <NativeBaseProvider>
+
+        <View>
+          <View style={styles.getStartedContainer}>
+
+            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">Alert Pitch Axis {onChangeValueX} degrees</Text>
+
+            <Slider defaultValue={45} maxValue={90} colorScheme="cyan" onChange={v => {
+              setOnChangeValueX(Math.floor(v));
+            }} onChangeEnd={v => {
+              v && setOnChangeEndValueX(Math.floor(v));
+              AsyncStorage.setItem('X', String(Math.floor(v)));
+              console.debug('set x');
+            }}>
+              <Slider.Track>
+                <Slider.FilledTrack />
+              </Slider.Track>
+              <Slider.Thumb />
+            </Slider>
+
+            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">Alert Roll Axis {onChangeValueY} degrees</Text>
+
+            <Slider defaultValue={45} maxValue={90} colorScheme="cyan" onChange={v => {
+              setOnChangeValueY(Math.floor(v));
+            }} onChangeEnd={v => {
+              v && setOnChangeEndValueY(Math.floor(v));
+               AsyncStorage.setItem('Y', String(Math.floor(v)));
+              console.debug('set y');
+            }}>
+              <Slider.Track>
+                <Slider.FilledTrack />
+              </Slider.Track>
+              <Slider.Thumb />
+            </Slider>
           </View>
 
-          <Text
-              style={styles.getStartedText}
-              lightColor="rgba(0,0,0,0.8)"
-              darkColor="rgba(255,255,255,0.8)">
-            Change any of the text, save the file, and your app will automatically update.
-          </Text>
         </View>
 
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText} lightColor={Colors.light.tint}>
-              Tap here if your app doesn't automatically update after making changes
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </NativeBaseProvider>
+
+
   );
 }
 const getData = async () => {

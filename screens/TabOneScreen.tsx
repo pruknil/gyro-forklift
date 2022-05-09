@@ -6,28 +6,8 @@ import {Orientation, Subscription} from 'expo-orientation-sensor'
 import {Audio} from 'expo-av';
 import { Box, Center, Button, NativeBaseProvider,Switch,Text} from "native-base";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import moment from 'moment';
 
 export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
-    const [sidePic, setSidePic] = useState(require('../assets/images/side/side-0.png'));
-    const [backPic, setBackPic] = useState(require('../assets/images/back/back0.png'));
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [playbackObject, setPlaybackObject] = useState(new Audio.Sound());
-    const [playbackStatus, setPlaybackStatus] = useState(null);
-    const [switchValue, setSwitchValue] = useState(false);
-
-    const toggleSwitch = (value) => {
-        //To handle switch toggle
-        setSwitchValue(value);
-        //State changes according to switch
-    };
-    const appState = useRef(AppState.currentState);
-    const [appStateVisible, setAppStateVisible] = useState(appState.current);
-
-    const [angles, setAngles] = React.useState({
-        pitch: 0,
-        roll: 0,
-    })
 
     const side10 = require('../assets/images/side/side20.png');
     const side20 = require('../assets/images/side/side45.png');
@@ -53,12 +33,49 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     const back_70 = require('../assets/images/back/back-70.png');
     const back_90 = require('../assets/images/back/back-90.png');
 
+    const [sidePic, setSidePic] = useState(side0);
+    const [backPic, setBackPic] = useState(back0);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [playbackObject, setPlaybackObject] = useState(new Audio.Sound());
+    const [playbackStatus, setPlaybackStatus] = useState(null);
 
+    const [switchValue, setSwitchValue] = useState(false);
+    const toggleSwitch = (value) => {
+        setSwitchValue(value);
+    };
+
+    const appState = useRef(AppState.currentState);
+    const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+    const [angles, setAngles] = React.useState({
+        pitch: 0,
+        roll: 0,
+    })
+
+    const [anglesAlert, setAnglesAlert] = React.useState({
+        pitch: 0,
+        roll: 0,
+    })
 
     React.useEffect(() => {
         let subscriber: Subscription
         AppState.addEventListener('change', _handleAppStateChange);
+        const focusEvt = navigation.addListener('focus', async () => {
+            console.log('Main Focus')
+            let roll,pitch;
 
+            const xval = await AsyncStorage.getItem('X')
+            if(xval !== null) {
+                roll = parseInt(xval);
+            }else{roll=0;}
+            const yval = await AsyncStorage.getItem('Y')
+            if(yval !== null) {
+               pitch = parseInt(yval);
+            }else{pitch=0;}
+
+            setAnglesAlert({roll: roll,pitch: pitch})
+            console.debug(anglesAlert)
+        });
         playbackObject.loadAsync(require("../assets/beep.mp3")).then(r => {
             if (r.isLoaded) {
                 setPlaybackStatus(r);
@@ -105,6 +122,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
             //console.log('Unloading Sound');
             playbackObject.unloadAsync();
             AppState.removeEventListener('change', _handleAppStateChange);
+            AppState.removeEventListener('focus', focusEvt);
         };
     }, [switchValue]);
 
@@ -166,7 +184,8 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
         }else if(chkpitch>70 && chkpitch<=90){
             setBackPic(back90)
         }
-        return Math.abs(chkpitch) > 45 || Math.abs(roll) > 45
+
+        return Math.abs(chkpitch) > anglesAlert.roll || Math.abs(roll) > anglesAlert.pitch
     }
 
     const _handleAppStateChange = nextAppState => {
