@@ -20,9 +20,7 @@ export default function EditScreenInfo({ path }: { path: string }) {
 
         <View>
           <View style={styles.getStartedContainer}>
-
             <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">Alert Pitch Axis {onChangeValueX} degrees</Text>
-
             <Slider defaultValue={45} maxValue={90} colorScheme="cyan" onChange={v => {
               setOnChangeValueX(Math.floor(v));
             }} onChangeEnd={v => {
@@ -35,9 +33,7 @@ export default function EditScreenInfo({ path }: { path: string }) {
               </Slider.Track>
               <Slider.Thumb />
             </Slider>
-
             <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">Alert Roll Axis {onChangeValueY} degrees</Text>
-
             <Slider defaultValue={45} maxValue={90} colorScheme="cyan" onChange={v => {
               setOnChangeValueY(Math.floor(v));
             }} onChangeEnd={v => {
@@ -51,12 +47,8 @@ export default function EditScreenInfo({ path }: { path: string }) {
               <Slider.Thumb />
             </Slider>
           </View>
-
         </View>
-
       </NativeBaseProvider>
-
-
   );
 }
 const getData = async () => {

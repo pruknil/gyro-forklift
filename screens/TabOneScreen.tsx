@@ -4,7 +4,7 @@ import {RootTabScreenProps} from '../types';
 import React, {useRef, useState} from 'react';
 import {Orientation, Subscription} from 'expo-orientation-sensor'
 import {Audio} from 'expo-av';
-import { Box, Center, Button, NativeBaseProvider,Switch,Text} from "native-base";
+import { Box, Center, HStack,Button, NativeBaseProvider,Switch,Text} from "native-base";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
@@ -57,6 +57,8 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
         roll: 0,
     })
 
+    const [warnTxt, setWarnTxt] = useState("");
+
     React.useEffect(() => {
         let subscriber: Subscription
         AppState.addEventListener('change', _handleAppStateChange);
@@ -95,9 +97,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                                 }).then(res => {
 
                                });
-
-                                await AsyncStorage.setItem('forklift', JSON.stringify(data))
-
+                                setWarnTxt("Roll : "+String(Math.abs((data.roll * 180) / Math.PI).toFixed(2)) + " ,Pitch : " + String(Math.abs((data.pitch * 180) / Math.PI).toFixed(2)))
                                 play().then(r => {
                                     Vibration.vibrate(50)
                                 })
@@ -237,7 +237,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                         </Box>
                     </Box>
                 </View>
-                <View style={{ flex: 5,  alignContent: 'center'}}>
+                <View style={{ flex: 4,  alignContent: 'center'}}>
 
                     <Box alignItems="center" >
                         <Box maxW="full" rounded="lg" overflow="scroll" borderColor="coolGray.200" borderWidth="1" _dark={{
@@ -265,18 +265,14 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                     </Box>
                 </View>
                 <View style={{ flex: 1}}>
-                    <Box alignItems="center" >
-                        <Text>
-                        {switchValue ? 'Detection ON' : 'Detection OFF'}
-                    </Text>
+                    <HStack alignItems="center" space={2}>
+                        <Text fontSize="lg"> {switchValue ? 'Detection ON' : 'Detection OFF'} </Text>
+                        <Switch onValueChange={toggleSwitch} value={switchValue} />
+                    </HStack>
+                    <Text fontSize="lg"> {warnTxt} </Text>
 
-                        <Switch
-                            style={{marginTop: 30}}
-                            onValueChange={toggleSwitch}
-                            value={switchValue}
-                        />
-                    </Box>
                 </View>
+
             </NativeBaseProvider>
 
     )
