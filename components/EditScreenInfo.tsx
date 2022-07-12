@@ -1,11 +1,11 @@
 import * as WebBrowser from 'expo-web-browser';
-import { StyleSheet, TouchableOpacity} from 'react-native';
+import { StyleSheet,TextInput, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Colors from '../constants/Colors';
 import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
 import * as React from "react";
-import {NativeBaseProvider,Slider, Stack} from 'native-base';
+import {NativeBaseProvider,Slider, Input} from 'native-base';
 
 export default function EditScreenInfo({ path }: { path: string }) {
 
@@ -46,6 +46,20 @@ export default function EditScreenInfo({ path }: { path: string }) {
               </Slider.Track>
               <Slider.Thumb />
             </Slider>
+            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">น้ำหนักรถ kg</Text>
+            <Input keyboardType={"numbers-and-punctuation"}  size="xs" placeholder="น้ำหนักรถ kg"/>
+            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">Load Capacity kg</Text>
+            <Input keyboardType={"numbers-and-punctuation"}  size="xs" placeholder="Load Capacity"/>
+            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">Load Center kg</Text>
+            <Input keyboardType={"numbers-and-punctuation"}  size="xs" placeholder="Load Center"/>
+            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">ความกว้างของรถ m</Text>
+            <Input keyboardType={"numbers-and-punctuation"}  size="xs" placeholder="ความกว้างของรถ"/>
+            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">ความยาวฐานล้อหน้า-หลัง m</Text>
+            <Input keyboardType={"numbers-and-punctuation"}  size="xs" placeholder="ความยาวฐานล้อหน้า-หลัง"/>
+            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">ระยะหว่างระหว่างจุด CG กับแกนล้อหน้า m</Text>
+            <Input keyboardType={"numbers-and-punctuation"}  size="xs" placeholder="ระยะหว่างระหว่างจุด CG กับแกนล้อหน้า"/>
+            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">ระยะจุดกึ่งกลางรถ m</Text>
+            <Input keyboardType={"numbers-and-punctuation"}  size="xs" placeholder="ระยะจุดกึ่งกลางรถ"/>
           </View>
         </View>
       </NativeBaseProvider>
@@ -72,7 +86,7 @@ function handleHelpPress() {
 
 const styles = StyleSheet.create({
   getStartedContainer: {
-    alignItems: 'center',
+    alignItems: 'stretch',
     marginHorizontal: 50,
   },
   homeScreenFilename: {
