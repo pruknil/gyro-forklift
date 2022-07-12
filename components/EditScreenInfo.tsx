@@ -5,7 +5,17 @@ import Colors from '../constants/Colors';
 import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
 import * as React from "react";
-import {NativeBaseProvider,Slider, Input} from 'native-base';
+import {
+  NativeBaseProvider,
+  Slider,
+  Input,
+  Stack,
+  InputGroup,
+  InputLeftAddon,
+  InputRightAddon,
+  Box,
+  Button
+} from 'native-base';
 
 export default function EditScreenInfo({ path }: { path: string }) {
 
@@ -46,20 +56,49 @@ export default function EditScreenInfo({ path }: { path: string }) {
               </Slider.Track>
               <Slider.Thumb />
             </Slider>
-            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">น้ำหนักรถ kg</Text>
-            <Input keyboardType={"numbers-and-punctuation"}  size="xs" placeholder="น้ำหนักรถ kg"/>
-            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">Load Capacity kg</Text>
-            <Input keyboardType={"numbers-and-punctuation"}  size="xs" placeholder="Load Capacity"/>
-            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">Load Center kg</Text>
-            <Input keyboardType={"numbers-and-punctuation"}  size="xs" placeholder="Load Center"/>
-            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">ความกว้างของรถ m</Text>
-            <Input keyboardType={"numbers-and-punctuation"}  size="xs" placeholder="ความกว้างของรถ"/>
-            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">ความยาวฐานล้อหน้า-หลัง m</Text>
-            <Input keyboardType={"numbers-and-punctuation"}  size="xs" placeholder="ความยาวฐานล้อหน้า-หลัง"/>
-            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">ระยะหว่างระหว่างจุด CG กับแกนล้อหน้า m</Text>
-            <Input keyboardType={"numbers-and-punctuation"}  size="xs" placeholder="ระยะหว่างระหว่างจุด CG กับแกนล้อหน้า"/>
-            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">ระยะจุดกึ่งกลางรถ m</Text>
-            <Input keyboardType={"numbers-and-punctuation"}  size="xs" placeholder="ระยะจุดกึ่งกลางรถ"/>
+              <InputGroup>
+                <InputLeftAddon children={"น้ำหนักรถ"} borderStyle={"dotted"}/>
+                <Input placeholder="0" keyboardType={"numbers-and-punctuation"}/>
+                <InputRightAddon children={"Kg"} borderStyle={"dotted"}/>
+              </InputGroup>
+
+            <InputGroup>
+              <InputLeftAddon children={"Load Capacity"} borderStyle={"dotted"}/>
+              <Input placeholder="0" keyboardType={"numbers-and-punctuation"} />
+              <InputRightAddon children={"Kg"} borderStyle={"dotted"}/>
+            </InputGroup>
+
+            <InputGroup>
+              <InputLeftAddon children={"Load Center"} borderStyle={"dotted"}/>
+              <Input placeholder="0" keyboardType={"numbers-and-punctuation"} />
+              <InputRightAddon children={"Kg"} borderStyle={"dotted"}/>
+            </InputGroup>
+
+            <InputGroup>
+              <InputLeftAddon children={"ความกว้างของรถ"} borderStyle={"dotted"}/>
+              <Input placeholder="0" keyboardType={"numbers-and-punctuation"}  />
+              <InputRightAddon children={"m"} borderStyle={"dotted"}/>
+            </InputGroup>
+
+            <InputGroup>
+              <InputLeftAddon children={"ความยาวฐานล้อหน้า-หลัง"} borderStyle={"dotted"}/>
+              <Input placeholder="0" keyboardType={"numbers-and-punctuation"}  />
+              <InputRightAddon children={"m"} borderStyle={"dotted"}/>
+            </InputGroup>
+
+            <InputGroup>
+              <InputLeftAddon children={"ระยะหว่างระหว่างจุด CG กับแกนล้อหน้า"} borderStyle={"dotted"}/>
+              <Input placeholder="0" keyboardType={"numbers-and-punctuation"}  />
+              <InputRightAddon children={"m"} borderStyle={"dotted"}/>
+            </InputGroup>
+
+            <InputGroup borderStyle={"dotted"}>
+              <InputLeftAddon children={"ระยะจุดกึ่งกลางรถ"} borderStyle={"dotted"} />
+              <Input placeholder="0" keyboardType={"numbers-and-punctuation"} />
+              <InputRightAddon children={"m"} borderStyle={"dotted"} />
+            </InputGroup>
+
+            <Button m={[50, 0]}  onPress={() => console.log("hello world")}>Calculate</Button>
           </View>
         </View>
       </NativeBaseProvider>
