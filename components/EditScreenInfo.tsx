@@ -25,6 +25,21 @@ export default function EditScreenInfo({ path }: { path: string }) {
   const [onChangeValueY, setOnChangeValueY] = React.useState(45);
   const [onChangeEndValueY, setOnChangeEndValueY] = React.useState(45);
 
+  const [weight, setWeight] = React.useState('');
+  const [loadCap, setLoadCap] = React.useState('');
+  const [loadCenter, setLoadCenter] = React.useState('');
+  const [carWidth, setCarWidth] = React.useState('');
+  const submitValue = () => {
+    const frmdetails = {
+      'weight' : weight,
+      'loadCap' : loadCap,
+      'loadCenter' : loadCenter,
+      'carWidth' : carWidth
+    }
+    console.log(frmdetails);
+  }
+
+
   return (
       <NativeBaseProvider>
 
@@ -58,25 +73,25 @@ export default function EditScreenInfo({ path }: { path: string }) {
             </Slider>
               <InputGroup>
                 <InputLeftAddon children={"น้ำหนักรถ"} borderStyle={"dotted"}/>
-                <Input placeholder="0" keyboardType={"numbers-and-punctuation"}/>
+                <Input placeholder="0" keyboardType={"numbers-and-punctuation"} onChangeText={e => setWeight(e)}/>
                 <InputRightAddon children={"Kg"} borderStyle={"dotted"}/>
               </InputGroup>
 
             <InputGroup>
               <InputLeftAddon children={"Load Capacity"} borderStyle={"dotted"}/>
-              <Input placeholder="0" keyboardType={"numbers-and-punctuation"} />
+              <Input placeholder="0" keyboardType={"numbers-and-punctuation"} onChangeText={e => setLoadCap(e)} />
               <InputRightAddon children={"Kg"} borderStyle={"dotted"}/>
             </InputGroup>
 
             <InputGroup>
               <InputLeftAddon children={"Load Center"} borderStyle={"dotted"}/>
-              <Input placeholder="0" keyboardType={"numbers-and-punctuation"} />
+              <Input placeholder="0" keyboardType={"numbers-and-punctuation"} onChangeText={e => setLoadCenter(e)}/>
               <InputRightAddon children={"Kg"} borderStyle={"dotted"}/>
             </InputGroup>
 
             <InputGroup>
               <InputLeftAddon children={"ความกว้างของรถ"} borderStyle={"dotted"}/>
-              <Input placeholder="0" keyboardType={"numbers-and-punctuation"}  />
+              <Input placeholder="0" keyboardType={"numbers-and-punctuation"}  onChangeText={e => setCarWidth(e)}/>
               <InputRightAddon children={"m"} borderStyle={"dotted"}/>
             </InputGroup>
 
@@ -98,7 +113,7 @@ export default function EditScreenInfo({ path }: { path: string }) {
               <InputRightAddon children={"m"} borderStyle={"dotted"} />
             </InputGroup>
 
-            <Button m={[50, 0]}  onPress={() => console.log("hello world")}>Calculate</Button>
+            <Button m={[50, 0]}  onPress={submitValue}>Calculate</Button>
           </View>
         </View>
       </NativeBaseProvider>
@@ -117,7 +132,7 @@ const getData = async () => {
     // error reading value
   }
 }
-function handleHelpPress() {
+function handleCalculatePress() {
   WebBrowser.openBrowserAsync(
       'https://docs.expo.io/get-started/create-a-new-app/#opening-the-app-on-your-phonetablet'
   );
