@@ -9,7 +9,6 @@ import {
   NativeBaseProvider,
   Slider,
   Input,
-  Stack,
   InputGroup,
   InputLeftAddon,
   InputRightAddon,
@@ -17,13 +16,15 @@ import {
   Button, ScrollView
 } from 'native-base';
 
-export default function EditScreenInfo({ path }: { path: string }) {
+export default function EditScreenInfo({ path }: { path: string}) {
 
   const [onChangeValueX, setOnChangeValueX] = React.useState(45);
   const [onChangeEndValueX, setOnChangeEndValueX] = React.useState(45);
 
   const [onChangeValueY, setOnChangeValueY] = React.useState(45);
   const [onChangeEndValueY, setOnChangeEndValueY] = React.useState(45);
+
+
 
   const [weight, setWeight] = React.useState('');
   const [loadCap, setLoadCap] = React.useState('');
@@ -33,17 +34,45 @@ export default function EditScreenInfo({ path }: { path: string }) {
   const [cg, setCg] = React.useState('');
   const [carCenter, setCarCenter] = React.useState('');
 
-  const submitValue = () => {
-    const frmdetails = {
-      'weight' : weight,
-      'loadCap' : loadCap,
-      'loadCenter' : loadCenter,
-      'carWidth' : carWidth,
-      'baseWheel' : baseWheel,
-      'cg' : cg,
-      'carCenter' : carCenter
+
+  const [frmdetails, setFrmdetails] = React.useState(onScreenLoad);
+
+
+  async function onScreenLoad() {
+    const savedVal = await AsyncStorage.getItem('forklift')
+    console.log('on screen load')
+    if (savedVal != null) {
+      setFrmdetails(JSON.parse(savedVal))
+    }else{
+      return {
+        'weight' : '',
+        'loadCap' : '',
+        'loadCenter' : '',
+        'carWidth' : '',
+        'baseWheel' : '',
+        'cg' : '',
+        'carCenter' : ''
+      }
     }
-    console.log(frmdetails);
+    // console.log(frmdetails.weight)
+  }
+
+  // React.useEffect(() => {
+  //   onScreenLoad();
+  // }, [])
+
+
+  const submitValue = () => {
+    // const frmdetails = {
+    //   'weight' : weight,
+    //   'loadCap' : loadCap,
+    //   'loadCenter' : loadCenter,
+    //   'carWidth' : carWidth,
+    //   'baseWheel' : baseWheel,
+    //   'cg' : cg,
+    //   'carCenter' : carCenter
+    // }
+    AsyncStorage.setItem('forklift', JSON.stringify(frmdetails)).then(()=>console.log('saved'))
   }
 
 
@@ -87,43 +116,43 @@ export default function EditScreenInfo({ path }: { path: string }) {
 
               <InputGroup>
                 <InputLeftAddon children={"น้ำหนักรถ"} borderStyle={"dotted"}/>
-                <Input placeholder="0" keyboardType={"numeric"} onChangeText={e => setWeight(e)} maxLength={5}/>
+                <Input value={frmdetails.weight} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, weight:e})} maxLength={5}/>
                 <InputRightAddon children={"Kg"} borderStyle={"dotted"}/>
               </InputGroup>
 
             <InputGroup>
               <InputLeftAddon children={"Load Capacity"} borderStyle={"dotted"}/>
-              <Input placeholder="0" keyboardType={"numbers-and-punctuation"} onChangeText={e => setLoadCap(e)} maxLength={5}/>
+              <Input value={frmdetails.loadCap} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, loadCap:e})} maxLength={5}/>
               <InputRightAddon children={"Kg"} borderStyle={"dotted"}/>
             </InputGroup>
 
             <InputGroup>
               <InputLeftAddon children={"Load Center"} borderStyle={"dotted"}/>
-              <Input placeholder="0" keyboardType={"numbers-and-punctuation"} onChangeText={e => setLoadCenter(e)} maxLength={5}/>
+              <Input value={frmdetails.loadCenter} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, loadCenter:e})} maxLength={5}/>
               <InputRightAddon children={"Kg"} borderStyle={"dotted"}/>
             </InputGroup>
 
             <InputGroup>
               <InputLeftAddon children={"ความกว้างของรถ"} borderStyle={"dotted"}/>
-              <Input placeholder="0" keyboardType={"numbers-and-punctuation"}  onChangeText={e => setCarWidth(e)} maxLength={5}/>
+              <Input value={frmdetails.carWidth} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, carWidth:e})} maxLength={5}/>
               <InputRightAddon children={"m"} borderStyle={"dotted"}/>
             </InputGroup>
 
             <InputGroup>
               <InputLeftAddon children={"ความยาวฐานล้อหน้า-หลัง"} borderStyle={"dotted"}/>
-              <Input placeholder="0" keyboardType={"numbers-and-punctuation"} onChangeText={e => setBaseWheel(e)} maxLength={5}/>
+              <Input value={frmdetails.baseWheel} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, baseWheel:e})} maxLength={5}/>
               <InputRightAddon children={"m"} borderStyle={"dotted"}/>
             </InputGroup>
 
             <InputGroup>
               <InputLeftAddon children={"ระยะหว่างระหว่างจุด CG กับแกนล้อหน้า"} borderStyle={"dotted"}/>
-              <Input placeholder="0" keyboardType={"numbers-and-punctuation"} onChangeText={e => setCg(e)} maxLength={5}/>
+              <Input value={frmdetails.cg} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, cg:e})} maxLength={5}/>
               <InputRightAddon children={"m"} borderStyle={"dotted"}/>
             </InputGroup>
 
             <InputGroup borderStyle={"dotted"}>
               <InputLeftAddon children={"ระยะจุดกึ่งกลางรถ"} borderStyle={"dotted"} />
-              <Input placeholder="0" keyboardType={"numbers-and-punctuation"} onChangeText={e => setCarCenter(e)} maxLength={5}/>
+              <Input value={frmdetails.carCenter} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, carCenter:e})} maxLength={5}/>
               <InputRightAddon children={"m"} borderStyle={"dotted"} />
             </InputGroup>
                 <Button m={[5, 0]}  onPress={submitValue}>Calculate</Button>

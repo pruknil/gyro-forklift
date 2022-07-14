@@ -1,15 +1,16 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import React from "react";
 import {RootTabScreenProps} from "../types";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SecondPage = ({navigation}: RootTabScreenProps<'TabTwo'>) =>  {
     React.useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
+        const unsubscribe = navigation.addListener('focus', async () => {
             console.log('Config Focus')
+
         });
         return unsubscribe;
     }, [navigation]);
