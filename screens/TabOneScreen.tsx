@@ -69,11 +69,11 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
             const xval = await AsyncStorage.getItem('X')
             if(xval !== null) {
                 roll = parseInt(xval);
-            }else{roll=0;}
+            }else{roll=45;}
             const yval = await AsyncStorage.getItem('Y')
             if(yval !== null) {
                pitch = parseInt(yval);
-            }else{pitch=0;}
+            }else{pitch=45;}
 
             setAnglesAlert({roll: roll,pitch: pitch})
             console.debug(anglesAlert)
