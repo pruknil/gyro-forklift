@@ -17,23 +17,21 @@ import {
 } from 'native-base';
 
 export default function EditScreenInfo({ path }: { path: string}) {
+  // interface carObj {
+  //   weight : number;
+  //   loadCap : number;
+  //   loadCenter : number;
+  //   carWidth : number;
+  //   baseWheel : number;
+  //   cg : number;
+  //   carCenter : number;
+  // }
 
   const [onChangeValueX, setOnChangeValueX] = React.useState(45);
   const [onChangeEndValueX, setOnChangeEndValueX] = React.useState(45);
 
   const [onChangeValueY, setOnChangeValueY] = React.useState(45);
   const [onChangeEndValueY, setOnChangeEndValueY] = React.useState(45);
-
-
-
-  const [weight, setWeight] = React.useState('');
-  const [loadCap, setLoadCap] = React.useState('');
-  const [loadCenter, setLoadCenter] = React.useState('');
-  const [carWidth, setCarWidth] = React.useState('');
-  const [baseWheel, setBaseWheel] = React.useState('');
-  const [cg, setCg] = React.useState('');
-  const [carCenter, setCarCenter] = React.useState('');
-
 
   const [frmdetails, setFrmdetails] = React.useState(onScreenLoad);
 
@@ -54,7 +52,6 @@ export default function EditScreenInfo({ path }: { path: string}) {
         'carCenter' : ''
       }
     }
-    // console.log(frmdetails.weight)
   }
 
   // React.useEffect(() => {
@@ -63,15 +60,8 @@ export default function EditScreenInfo({ path }: { path: string}) {
 
 
   const submitValue = () => {
-    // const frmdetails = {
-    //   'weight' : weight,
-    //   'loadCap' : loadCap,
-    //   'loadCenter' : loadCenter,
-    //   'carWidth' : carWidth,
-    //   'baseWheel' : baseWheel,
-    //   'cg' : cg,
-    //   'carCenter' : carCenter
-    // }
+    let carCenter = frmdetails.carWidth/2
+    setFrmdetails({...frmdetails, carCenter:carCenter})
     AsyncStorage.setItem('forklift', JSON.stringify(frmdetails)).then(()=>console.log('saved'))
   }
 
@@ -116,7 +106,7 @@ export default function EditScreenInfo({ path }: { path: string}) {
 
               <InputGroup>
                 <InputLeftAddon children={"น้ำหนักรถ"} borderStyle={"dotted"}/>
-                <Input value={frmdetails.weight} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, weight:e})} maxLength={5}/>
+                <Input value={frmdetails.weight} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, weight:e})} maxLength={5} style={{ color: "#fff" }} />
                 <InputRightAddon children={"Kg"} borderStyle={"dotted"}/>
               </InputGroup>
 
@@ -150,11 +140,11 @@ export default function EditScreenInfo({ path }: { path: string}) {
               <InputRightAddon children={"m"} borderStyle={"dotted"}/>
             </InputGroup>
 
-            <InputGroup borderStyle={"dotted"}>
-              <InputLeftAddon children={"ระยะจุดกึ่งกลางรถ"} borderStyle={"dotted"} />
-              <Input value={frmdetails.carCenter} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, carCenter:e})} maxLength={5}/>
-              <InputRightAddon children={"m"} borderStyle={"dotted"} />
-            </InputGroup>
+            {/*<InputGroup borderStyle={"dotted"}>*/}
+            {/*  <InputLeftAddon children={"ระยะจุดกึ่งกลางรถ"} borderStyle={"dotted"} />*/}
+            {/*  <Input value={frmdetails.carCenter} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, carCenter:e})} maxLength={5}/>*/}
+            {/*  <InputRightAddon children={"m"} borderStyle={"dotted"} />*/}
+            {/*</InputGroup>*/}
                 <Button m={[5, 0]}  onPress={submitValue}>Calculate</Button>
               </KeyboardAvoidingView>
 
@@ -186,6 +176,7 @@ function handleCalculatePress() {
   );
 }
 */
+
 const styles = StyleSheet.create({
   getStartedContainer: {
     alignItems: 'stretch',
