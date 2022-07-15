@@ -105,8 +105,8 @@ export default function EditScreenInfo({ path }: { path: string}) {
             </Slider>
 
               <InputGroup>
-                <InputLeftAddon children={"น้ำหนักรถ"} borderStyle={"dotted"}/>
-                <Input value={frmdetails.weight} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, weight:e})} maxLength={5} style={{ color: "#fff" }} />
+                <InputLeftAddon children={"น้ำหนักรถ"} borderStyle={"dotted"} />
+                <Input value={frmdetails.weight} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, weight:e})} maxLength={5}  />
                 <InputRightAddon children={"Kg"} borderStyle={"dotted"}/>
               </InputGroup>
 
