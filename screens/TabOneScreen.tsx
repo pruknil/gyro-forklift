@@ -53,9 +53,22 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     })
 
     const [anglesAlert, setAnglesAlert] = React.useState({
-        pitch: 0,
+        pitchFront: 0,
+        pitchBack: 0,
         roll: 0,
     })
+
+    const [car, setCar] = React.useState({
+        weight : '',
+        height : '',
+        loadCap : '',
+        loadCenter : '',
+        carWidth : '',
+        baseWheel : '',
+        cg: '',
+        carCenter : 0
+    })
+
 
     const [warnTxt, setWarnTxt] = useState("");
 
@@ -75,7 +88,24 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                pitch = parseInt(yval);
             }else{pitch=45;}
 
-            setAnglesAlert({roll: roll,pitch: pitch})
+            AsyncStorage.getItem("forklift").then((value) => {
+
+                if (typeof value === "string") {
+                    let data = JSON.parse(value)
+                    setCar({
+                        weight : data.weight,
+                        height : data.height,
+                        loadCap : data.loadCap,
+                        loadCenter : data.loadCenter,
+                        carWidth : data.carWidth,
+                        baseWheel : data.baseWheel,
+                        cg: data.cg,
+                        carCenter : data.carCenter})
+                    console.log(car);
+                }
+            });
+
+            setAnglesAlert({roll: roll,pitchFront: pitch,pitchBack: pitch})
             console.debug(anglesAlert)
         });
         playbackObject.loadAsync(require("../assets/beep.mp3")).then(r => {
@@ -92,11 +122,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 
                                 setIsPlaying(true);
 
-                                AsyncStorage.getItem("forklift").then((value) => {
-                                    console.log('data is'+value);
-                                }).then(res => {
 
-                               });
                                 setWarnTxt("Roll : "+String(Math.abs((data.roll * 180) / Math.PI).toFixed(2)) + " ,Pitch : " + String(Math.abs((data.pitch * 180) / Math.PI).toFixed(2)))
                                 play().then(r => {
                                     Vibration.vibrate(50)
@@ -183,6 +209,30 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
             setBackPic(back70)
         }else if(chkpitch>70 && chkpitch<=90){
             setBackPic(back90)
+        }
+
+        // console.log(Math.cos(roll).toFixed(2))
+        // console.log((car.carWidth/2)*0.1)
+        let a = (car.carWidth/2)*0.1
+        let b = Math.cos(roll).toFixed(2)
+        if(pitch < 0){//เอียงขึ้น
+            let b = Math.tan(pitch* Math.PI/180) * (car.height/2)
+            let xx = (car.baseWheel - car.cg)/2
+            if(b > xx){
+                console.log("alert")
+            }
+
+        }else{//เอียงลง
+            let b = Math.tan(pitch* Math.PI/180) * (car.height/2)
+            let xx = (car.cg)/2
+            if(Math.abs(b) > xx){
+                console.log("alert")
+            }
+        }
+        if(roll < 0){//เอียงขวา
+
+        }else{//เอียงซ้าย
+
         }
 
         return Math.abs(chkpitch) > anglesAlert.roll || Math.abs(roll) > anglesAlert.pitch

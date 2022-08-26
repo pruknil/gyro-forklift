@@ -44,12 +44,13 @@ export default function EditScreenInfo({ path }: { path: string}) {
     }else{
       return {
         'weight' : '',
+        'height' : '',
         'loadCap' : '',
         'loadCenter' : '',
         'carWidth' : '',
         'baseWheel' : '',
         'cg' : '',
-        'carCenter' : ''
+        'carCenter' : 0
       }
     }
   }
@@ -119,7 +120,7 @@ export default function EditScreenInfo({ path }: { path: string}) {
             <InputGroup>
               <InputLeftAddon children={"Load Center"} borderStyle={"dotted"}/>
               <Input value={frmdetails.loadCenter} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, loadCenter:e})} maxLength={5}/>
-              <InputRightAddon children={"Kg"} borderStyle={"dotted"}/>
+              <InputRightAddon children={"m"} borderStyle={"dotted"}/>
             </InputGroup>
 
             <InputGroup>
@@ -139,7 +140,11 @@ export default function EditScreenInfo({ path }: { path: string}) {
               <Input value={frmdetails.cg} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, cg:e})} maxLength={5}/>
               <InputRightAddon children={"m"} borderStyle={"dotted"}/>
             </InputGroup>
-
+            <InputGroup>
+              <InputLeftAddon children={"ความสูงของรถ"} borderStyle={"dotted"}/>
+              <Input value={frmdetails.height} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, height:e})} maxLength={5}/>
+              <InputRightAddon children={"m"} borderStyle={"dotted"}/>
+            </InputGroup>
             {/*<InputGroup borderStyle={"dotted"}>*/}
             {/*  <InputLeftAddon children={"ระยะจุดกึ่งกลางรถ"} borderStyle={"dotted"} />*/}
             {/*  <Input value={frmdetails.carCenter} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, carCenter:e})} maxLength={5}/>*/}
