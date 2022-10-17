@@ -210,32 +210,41 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
         }else if(chkpitch>70 && chkpitch<=90){
             setBackPic(back90)
         }
-
-        // console.log(Math.cos(roll).toFixed(2))
-        // console.log((car.carWidth/2)*0.1)
-        let a = (car.carWidth/2)*0.1
-        let b = Math.cos(roll).toFixed(2)
+        let alarm = false
         if(pitch < 0){//เอียงขึ้น
             let b = Math.tan(pitch* Math.PI/180) * (car.height/2)
             let xx = (car.baseWheel - car.cg)/2
             if(b > xx){
-                console.log("alert")
+                //console.log("alert")
+                alarm = true
             }
 
         }else{//เอียงลง
             let b = Math.tan(pitch* Math.PI/180) * (car.height/2)
             let xx = (car.cg)/2
             if(Math.abs(b) > xx){
-                console.log("alert")
+                //console.log("alert")
+                alarm = true;
             }
         }
-        if(roll < 0){//เอียงขวา
+        // if(roll < 0){//เอียงขวา
+        //     let b = Math.tan(roll* Math.PI/180) * (car.height/2)
+        //     let xx = (car.width)/2
+        //     if(Math.abs(b) > xx){
+        //         console.log("alert")
+        //     }
+        // }else{//เอียงซ้าย
+        //
+        // }
 
-        }else{//เอียงซ้าย
-
+        let b = Math.tan(roll* Math.PI/180) * (car.height/2)
+        let xx = (car.carWidth)/2
+        if(Math.abs(b) > xx){
+            //console.log("alert")
+            alarm = true;
         }
-
-        return Math.abs(chkpitch) > anglesAlert.roll || Math.abs(roll) > anglesAlert.pitch
+        //return Math.abs(chkpitch) > anglesAlert.roll || Math.abs(roll) > anglesAlert.pitch
+        return alarm
     }
 
     const _handleAppStateChange = nextAppState => {

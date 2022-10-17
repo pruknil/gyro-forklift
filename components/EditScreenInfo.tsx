@@ -78,32 +78,35 @@ export default function EditScreenInfo({ path }: { path: string}) {
                   keyboardVerticalOffset={100}
                   behavior={"position"}
               >
-            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">Alert Pitch Axis {onChangeValueX} degrees</Text>
-            <Slider defaultValue={45} maxValue={90} colorScheme="cyan" onChange={v => {
-              setOnChangeValueX(Math.floor(v));
-            }} onChangeEnd={v => {
-              v && setOnChangeEndValueX(Math.floor(v));
-              AsyncStorage.setItem('X', String(Math.floor(v)));
-              console.debug('set x');
-            }}>
-              <Slider.Track>
-                <Slider.FilledTrack />
-              </Slider.Track>
-              <Slider.Thumb />
-            </Slider>
-            <Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">Alert Roll Axis {onChangeValueY} degrees</Text>
-            <Slider defaultValue={45} maxValue={90} colorScheme="cyan" onChange={v => {
-              setOnChangeValueY(Math.floor(v));
-            }} onChangeEnd={v => {
-              v && setOnChangeEndValueY(Math.floor(v));
-               AsyncStorage.setItem('Y', String(Math.floor(v)));
-              console.debug('set y');
-            }}>
-              <Slider.Track>
-                <Slider.FilledTrack />
-              </Slider.Track>
-              <Slider.Thumb />
-            </Slider>
+
+
+
+            {/*<Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">Alert Pitch Axis {onChangeValueX} degrees</Text>*/}
+            {/*<Slider defaultValue={45} maxValue={90} colorScheme="cyan" onChange={v => {*/}
+            {/*  setOnChangeValueX(Math.floor(v));*/}
+            {/*}} onChangeEnd={v => {*/}
+            {/*  v && setOnChangeEndValueX(Math.floor(v));*/}
+            {/*  AsyncStorage.setItem('X', String(Math.floor(v)));*/}
+            {/*  console.debug('set x');*/}
+            {/*}}>*/}
+            {/*  <Slider.Track>*/}
+            {/*    <Slider.FilledTrack />*/}
+            {/*  </Slider.Track>*/}
+            {/*  <Slider.Thumb />*/}
+            {/*</Slider>*/}
+            {/*<Text style={styles.getStartedText} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">Alert Roll Axis {onChangeValueY} degrees</Text>*/}
+            {/*<Slider defaultValue={45} maxValue={90} colorScheme="cyan" onChange={v => {*/}
+            {/*  setOnChangeValueY(Math.floor(v));*/}
+            {/*}} onChangeEnd={v => {*/}
+            {/*  v && setOnChangeEndValueY(Math.floor(v));*/}
+            {/*   AsyncStorage.setItem('Y', String(Math.floor(v)));*/}
+            {/*  console.debug('set y');*/}
+            {/*}}>*/}
+            {/*  <Slider.Track>*/}
+            {/*    <Slider.FilledTrack />*/}
+            {/*  </Slider.Track>*/}
+            {/*  <Slider.Thumb />*/}
+            {/*</Slider>*/}
 
               <InputGroup>
                 <InputLeftAddon children={"น้ำหนักรถ"} borderStyle={"dotted"} />
