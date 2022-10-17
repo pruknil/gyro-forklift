@@ -16,6 +16,7 @@ import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
+import LogScreen from '../screens/LogScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
@@ -92,6 +93,14 @@ function BottomTabNavigator() {
             tabBarIcon: ({ color }) => <TabBarIcon name="id-card" color={color} />,
         })}
       />
+        <BottomTab.Screen
+            name="Log"
+            component={LogScreen}
+            options={({ navigation }: RootTabScreenProps<'Log'>) => ({
+                title: 'Logs',
+                tabBarIcon: ({ color }) => <TabBarIcon name="file" color={color} />,
+            })}
+        />
     </BottomTab.Navigator>
   );
 }

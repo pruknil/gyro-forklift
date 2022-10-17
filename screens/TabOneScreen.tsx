@@ -211,19 +211,17 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
             setBackPic(back90)
         }
         let alarm = false
-        if(pitch < 0){//เอียงขึ้น
-            let b = Math.tan(pitch* Math.PI/180) * (car.height/2)
+        if(chkpitch > 0){//เอียงขึ้น
+            let b = Math.tan(chkpitch* Math.PI/180) * (car.height/2)
             let xx = (car.baseWheel - car.cg)/2
             if(b > xx){
-                //console.log("alert")
                 alarm = true
             }
 
         }else{//เอียงลง
-            let b = Math.tan(pitch* Math.PI/180) * (car.height/2)
+            let b = Math.tan(chkpitch* Math.PI/180) * (car.height/2)
             let xx = (car.cg)/2
             if(Math.abs(b) > xx){
-                //console.log("alert")
                 alarm = true;
             }
         }
