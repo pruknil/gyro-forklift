@@ -4,7 +4,7 @@ import {RootTabScreenProps} from '../types';
 import React, {useRef, useState} from 'react';
 import {Orientation, Subscription} from 'expo-orientation-sensor'
 import {Audio} from 'expo-av';
-import { Box, Center, HStack,Button, NativeBaseProvider,Switch,Text} from "native-base";
+import {Box, Center, HStack, Button, NativeBaseProvider, Switch, Text, ZStack, Hidden} from "native-base";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
@@ -32,6 +32,8 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     const back_45 = require('../assets/images/back/back-60.png');
     const back_70 = require('../assets/images/back/back-70.png');
     const back_90 = require('../assets/images/back/back-90.png');
+
+    const cautionPic = require('../assets/images/caution.png');
 
     const [sidePic, setSidePic] = useState(side0);
     const [backPic, setBackPic] = useState(back0);
@@ -268,7 +270,10 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 
     return (
             <NativeBaseProvider style={styles.container}>
+
+
                 <View style={{ flex: 2,  alignContent: 'center'}}>
+
                     <Box alignItems="center">
                         <Box maxW="full" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
                             borderColor: "coolGray.600",
@@ -319,6 +324,15 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                                 </Center>
                             </Box>
                         </Box>
+                        { isPlaying &&
+                            <Box mt="0" >
+                                <ZStack mt="-250" ml={-175}>
+                                    <Image  style={{height:140,width:350,resizeMode: 'stretch'}} source={cautionPic} resizeMethod={"scale"} />
+                                </ZStack>
+                            </Box>
+                        }
+
+
                     </Box>
                 </View>
                 <View style={{ flex: 1}}>
