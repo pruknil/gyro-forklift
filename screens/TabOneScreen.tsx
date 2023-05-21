@@ -149,8 +149,8 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
             // }
             //console.log('Unloading Sound');
             playbackObject.unloadAsync();
-            AppState.removeEventListener('change', _handleAppStateChange);
-            AppState.removeEventListener('focus', focusEvt);
+            //AppState.removeEventListener('change', _handleAppStateChange);
+            //AppState.removeEventListener('focus', focusEvt);
         };
     }, [switchValue]);
 
