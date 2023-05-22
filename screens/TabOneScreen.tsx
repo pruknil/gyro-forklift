@@ -6,7 +6,6 @@ import {Orientation, Subscription} from 'expo-orientation-sensor'
 import {Audio} from 'expo-av';
 import {Box, Center, HStack, Button, NativeBaseProvider, Switch, Text, ZStack, Hidden} from "native-base";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
 
     const side10 = require('../assets/images/side/side20.png');
