@@ -1,3 +1,4 @@
 REACT_NATIVE_PACKAGER_HOSTNAME=192.168.2.42
+eas build -p android --profile preview
 
 bundletool build-apks --bundle=my_app.aab --output=my_app.apks
