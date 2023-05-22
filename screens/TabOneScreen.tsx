@@ -41,8 +41,8 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     const [playbackStatus, setPlaybackStatus] = useState(null);
 
     const [switchValue, setSwitchValue] = useState(false);
-    const toggleSwitch = (value) => {
-        setSwitchValue(value);
+    const toggleSwitch = (swVal: any) => {
+        setSwitchValue(swVal);
     };
 
     const appState = useRef(AppState.currentState);

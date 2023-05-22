@@ -13,7 +13,7 @@ import {
   InputLeftAddon,
   InputRightAddon,
   KeyboardAvoidingView,
-  Button, ScrollView
+  Button, ScrollView, Stack
 } from 'native-base';
 
 export default function EditScreenInfo({ path }: { path: string}) {
@@ -41,6 +41,7 @@ export default function EditScreenInfo({ path }: { path: string}) {
     console.log('on screen load')
     if (savedVal != null) {
       setFrmdetails(JSON.parse(savedVal))
+
     }else{
       return {
         'weight' : '',
@@ -107,45 +108,65 @@ export default function EditScreenInfo({ path }: { path: string}) {
             {/*  </Slider.Track>*/}
             {/*  <Slider.Thumb />*/}
             {/*</Slider>*/}
-
               <InputGroup>
                 <InputLeftAddon children={"น้ำหนักรถ"} borderStyle={"dotted"} />
-                <Input value={frmdetails.weight} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, weight:e})} maxLength={5}  />
+                <Input w={{
+                  base: "25%",
+                  md: "100%"
+                }} value={frmdetails.weight} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, weight:e})} maxLength={5}  />
                 <InputRightAddon children={"Kg"} borderStyle={"dotted"}/>
               </InputGroup>
 
             <InputGroup>
               <InputLeftAddon children={"Load Capacity"} borderStyle={"dotted"}/>
-              <Input value={frmdetails.loadCap} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, loadCap:e})} maxLength={5}/>
+              <Input w={{
+                base: "25%",
+                md: "100%"
+              }} value={frmdetails.loadCap} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, loadCap:e})} maxLength={5}/>
               <InputRightAddon children={"Kg"} borderStyle={"dotted"}/>
             </InputGroup>
 
             <InputGroup>
               <InputLeftAddon children={"Load Center"} borderStyle={"dotted"}/>
-              <Input value={frmdetails.loadCenter} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, loadCenter:e})} maxLength={5}/>
+              <Input w={{
+                base: "25%",
+                md: "100%"
+              }} value={frmdetails.loadCenter} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, loadCenter:e})} maxLength={5}/>
               <InputRightAddon children={"m"} borderStyle={"dotted"}/>
             </InputGroup>
 
             <InputGroup>
               <InputLeftAddon children={"ความกว้างของรถ"} borderStyle={"dotted"}/>
-              <Input value={frmdetails.carWidth} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, carWidth:e})} maxLength={5}/>
+              <Input w={{
+                base: "25%",
+                md: "100%"
+              }} value={frmdetails.carWidth} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, carWidth:e})} maxLength={5}/>
               <InputRightAddon children={"m"} borderStyle={"dotted"}/>
             </InputGroup>
 
             <InputGroup>
               <InputLeftAddon children={"ความยาวฐานล้อหน้า-หลัง"} borderStyle={"dotted"}/>
-              <Input value={frmdetails.baseWheel} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, baseWheel:e})} maxLength={5}/>
+              <Input w={{
+                base: "25%",
+                md: "100%"
+              }} value={frmdetails.baseWheel} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, baseWheel:e})} maxLength={5}/>
               <InputRightAddon children={"m"} borderStyle={"dotted"}/>
             </InputGroup>
 
             <InputGroup>
-              <InputLeftAddon children={"ระยะหว่างระหว่างจุด CG กับแกนล้อหน้า"} borderStyle={"dotted"}/>
-              <Input value={frmdetails.cg} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, cg:e})} maxLength={5}/>
+              <InputLeftAddon children={"ระยะหว่างระหว่างจุด \n CG กับแกนล้อหน้า"} borderStyle={"dotted"}/>
+              <Input w={{
+                base: "25%",
+                md: "100%"
+              }} value={frmdetails.cg} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, cg:e})} maxLength={5}/>
               <InputRightAddon children={"m"} borderStyle={"dotted"}/>
             </InputGroup>
             <InputGroup>
               <InputLeftAddon children={"ความสูงของรถ"} borderStyle={"dotted"}/>
-              <Input value={frmdetails.height} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, height:e})} maxLength={5}/>
+              <Input w={{
+                base: "25%",
+                md: "100%"
+              }} value={frmdetails.height} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, height:e})} maxLength={5}/>
               <InputRightAddon children={"m"} borderStyle={"dotted"}/>
             </InputGroup>
             {/*<InputGroup borderStyle={"dotted"}>*/}
