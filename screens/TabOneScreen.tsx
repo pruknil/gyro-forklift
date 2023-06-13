@@ -56,12 +56,6 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
         roll: 0,
     })
 
-    const [anglesAlert, setAnglesAlert] = React.useState({
-        pitchFront: 0,
-        pitchBack: 0,
-        roll: 0,
-    })
-
     const [car, setCar] = React.useState({
         weight : 0,//นน รถโฟล์คลิฟ
         w2 : 0,//นนสิ่งของ
@@ -113,9 +107,6 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 
                 }
             });
-
-            setAnglesAlert({roll: roll,pitchFront: pitch,pitchBack: pitch})
-            console.debug(anglesAlert)
         });
         playbackObject.loadAsync(require("../assets/beep.mp3")).then(r => {
             if (r.isLoaded) {
@@ -128,10 +119,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                     subscriber = Orientation.addListener(async data => {
                             setAngles(data)
                             if (cal(data) && switchValue) {
-
                                 setIsPlaying(true);
-
-
                                 setWarnTxt("Roll : "+String(Math.abs((data.roll * 180) / Math.PI).toFixed(2)) + " ,Pitch : " + String(Math.abs((data.pitch * 180) / Math.PI).toFixed(2)))
                                 play().then(r => {
                                     Vibration.vibrate(50)
@@ -220,23 +208,31 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
             setBackPic(back90)
         }
         let alarm = false
-
+        let x6 = car.x6
+        let x8 = car.x8
+        let x10 = car.x10
+        let x9 = car.x9
         if(hasLoad){
-            console.log("calc new value")
+            let aw = car.weight + car.w2
+            x6 = (car.weight * ((car.baseWheel-car.x6) + (car.w2*(car.baseWheel+car.x3))))/aw
+            x8 = ((car.weight*car.x8) + (car.w2*car.x11))/aw
+            x10 = ((car.height-x8)*car.x10)/car.height
+            let x5 = ((car.height - x8)*car.baseWheel)/car.height
+            let x4 = ((car.height - x8)*car.carWidth)/car.height
+            x9 = (x4/x5)*x10
+
+            console.log(x6,x8,x10,x9)
         }
 
-
         if(chkpitch > 0){//เอียงขึ้น
-            let b = Math.tan(chkpitch* Math.PI/180) * car.x8
-            let xx = car.x10/2
-            if(b > xx){
+            let b = Math.tan(chkpitch* Math.PI/180) * x8
+            if(b > x10/2){
                 alarm = true
             }
 
         }else{//เอียงลง
-            let b = Math.tan(chkpitch* Math.PI/180) * car.x8
-            let xx = car.x6/2
-            if(Math.abs(b) > xx){
+            let b = Math.tan(chkpitch* Math.PI/180) * x8
+            if(Math.abs(b) > x6/2){
                 alarm = true;
             }
         }
@@ -251,9 +247,8 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
         //
         // }
 
-        let b = Math.tan(roll* Math.PI/180) * car.x8
-        let xx = car.x9/2
-        if(Math.abs(b) > xx){
+        let b = Math.tan(roll* Math.PI/180) * x8
+        if(Math.abs(b) > x9/2){
             alarm = true;
         }
 

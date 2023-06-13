@@ -43,7 +43,7 @@ export default function EditScreenInfo({ path }: { path: string}) {
       setFrmdetails(JSON.parse(savedVal))
     }else{
       return {
-        'weight' : 0,//นน รถโฟล์คลิฟ
+        'weight' : 0,//w1
         'w2' : 0,//นนสิ่งของ
         'x3':0,
         'x11':0,
