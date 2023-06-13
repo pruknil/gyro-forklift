@@ -221,7 +221,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
             let x4 = ((car.height - x8)*car.carWidth)/car.height
             x9 = (x4/x5)*x10
 
-            console.log(x6,x8,x10,x9)
+           // console.log(x6,x8,x10,x9)
         }
 
         if(chkpitch > 0){//เอียงขึ้น
