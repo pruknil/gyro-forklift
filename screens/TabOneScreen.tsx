@@ -41,10 +41,13 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     const [playbackStatus, setPlaybackStatus] = useState(null);
 
     const [switchValue, setSwitchValue] = useState(false);
+    const [hasLoad, setHasLoad] = useState(false);
     const toggleSwitch = (swVal: any) => {
         setSwitchValue(swVal);
     };
-
+    const toggleLoadSwitch = (swVal: any) => {
+        setHasLoad(swVal);
+    };
     const appState = useRef(AppState.currentState);
     const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
@@ -60,14 +63,17 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     })
 
     const [car, setCar] = React.useState({
-        weight : '',
-        height : '',
-        loadCap : '',
-        loadCenter : '',
-        carWidth : '',
-        baseWheel : '',
-        cg: '',
-        carCenter : 0
+        weight : 0,//นน รถโฟล์คลิฟ
+        w2 : 0,//นนสิ่งของ
+        x3:0,
+        x11:0,
+        carWidth:0,//x4
+        x9:0,
+        baseWheel : 0,//x5
+        x6:0,
+        x10:0,
+        height : 0,//x7
+        x8 : 0,
     })
 
 
@@ -90,19 +96,21 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
             }else{pitch=45;}
 
             AsyncStorage.getItem("forklift").then((value) => {
-
                 if (typeof value === "string") {
                     let data = JSON.parse(value)
                     setCar({
-                        weight : data.weight,
-                        height : data.height,
-                        loadCap : data.loadCap,
-                        loadCenter : data.loadCenter,
-                        carWidth : data.carWidth,
-                        baseWheel : data.baseWheel,
-                        cg: data.cg,
-                        carCenter : data.carCenter})
-                    console.log(car);
+                        'weight' : data.weight,//นน รถโฟล์คลิฟ
+                        'w2' : data.w2,//นนสิ่งของ
+                        'x3':data.x3,
+                        'x11':data.x11,
+                        'carWidth':data.carWidth,//x4
+                        'x9':data.x9,
+                        'baseWheel' : data.baseWheel,//x5
+                        'x6':data.x6,
+                        'x10':data.x10,
+                        'height' : data.height,//x7
+                        'x8' : data.x8})
+
                 }
             });
 
@@ -151,7 +159,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
             //AppState.removeEventListener('change', _handleAppStateChange);
             //AppState.removeEventListener('focus', focusEvt);
         };
-    }, [switchValue]);
+    }, [switchValue,hasLoad]);
 
 
     function cal(data) {
@@ -212,20 +220,27 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
             setBackPic(back90)
         }
         let alarm = false
+
+        if(hasLoad){
+            console.log("calc new value")
+        }
+
+
         if(chkpitch > 0){//เอียงขึ้น
-            let b = Math.tan(chkpitch* Math.PI/180) * (car.height/2)
-            let xx = (car.baseWheel - car.cg)/2
+            let b = Math.tan(chkpitch* Math.PI/180) * car.x8
+            let xx = car.x10/2
             if(b > xx){
                 alarm = true
             }
 
         }else{//เอียงลง
-            let b = Math.tan(chkpitch* Math.PI/180) * (car.height/2)
-            let xx = (car.cg)/2
+            let b = Math.tan(chkpitch* Math.PI/180) * car.x8
+            let xx = car.x6/2
             if(Math.abs(b) > xx){
                 alarm = true;
             }
         }
+        //console.log("")
         // if(roll < 0){//เอียงขวา
         //     let b = Math.tan(roll* Math.PI/180) * (car.height/2)
         //     let xx = (car.width)/2
@@ -236,13 +251,12 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
         //
         // }
 
-        let b = Math.tan(roll* Math.PI/180) * (car.height/2)
-        let xx = (car.carWidth)/2
+        let b = Math.tan(roll* Math.PI/180) * car.x8
+        let xx = car.x9/2
         if(Math.abs(b) > xx){
-            //console.log("alert")
             alarm = true;
         }
-        //return Math.abs(chkpitch) > anglesAlert.roll || Math.abs(roll) > anglesAlert.pitch
+
         return alarm
     }
 
@@ -334,13 +348,16 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 
                     </Box>
                 </View>
-                <View style={{ flex: 1}}>
+                <View style={{ flex: 2}}>
                     <HStack alignItems="center" space={2}>
                         <Text fontSize="lg"> {switchValue ? 'Detection ON' : 'Detection OFF'} </Text>
                         <Switch onValueChange={toggleSwitch} value={switchValue} />
                     </HStack>
                     <Text fontSize="lg"> {warnTxt} </Text>
-
+                    <HStack alignItems="center" space={2}>
+                        <Text fontSize="lg"> {hasLoad ? 'Load ON' : 'Load OFF'} </Text>
+                        <Switch onValueChange={toggleLoadSwitch} value={hasLoad} />
+                    </HStack>
                 </View>
 
             </NativeBaseProvider>

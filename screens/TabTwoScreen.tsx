@@ -16,11 +16,11 @@ const SecondPage = ({navigation}: RootTabScreenProps<'TabTwo'>) =>  {
     }, [navigation]);
   return (
     <View style={styles.container}>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      {/*<View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />*/}
       <EditScreenInfo path="/screens/TabTwoScreen.tsx"/>
-      <Text style={styles.title}>
+      {/*<Text style={styles.title}>*/}
 
-      </Text>
+      {/*</Text>*/}
     </View>
   );
 }
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   separator: {
-    marginVertical: 30,
+    marginVertical: 20,
     height: 1,
     width: '80%',
   },
