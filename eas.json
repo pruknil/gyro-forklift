@@ -16,6 +16,11 @@
         "ANDROID_NDK_HOME": "/Users/kbtgmacbook/Library/Android/sdk/ndk"
       }
     },
+    "build-remote-apk": {
+      "android": {
+        "buildType": "apk"
+      }
+    },
     "production": {}
   },
   "submit": {

@@ -8,7 +8,9 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest --watchAll",
-    "apk": "eas build -p android --profile preview --local"
+    "apk": "eas build -p android --profile preview --local",
+    "apk-remote": "eas build -p android --profile build-remote-apk"
+
   },
   "jest": {
     "preset": "jest-expo"
