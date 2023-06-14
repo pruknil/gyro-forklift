@@ -70,7 +70,7 @@ export default function EditScreenInfo({ path }: { path: string}) {
     let x10 = frmdetails.baseWheel - x6
     let x8 = frmdetails.height/2
     setFrmdetails({...frmdetails, 'x9':x9,'x6':x6,'x10':x10,'x8':x8})
-    AsyncStorage.setItem('forklift', JSON.stringify(frmdetails)).then(()=>console.log('saved'))
+    AsyncStorage.setItem('forklift', JSON.stringify(frmdetails)).then(()=>alert('Saved'))
   }
 
 

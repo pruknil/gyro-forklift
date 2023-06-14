@@ -2,10 +2,11 @@ import {AppState, StyleSheet, Vibration, Image, Platform} from 'react-native';
 import { View} from '../components/Themed';
 import {RootTabScreenProps} from '../types';
 import React, {useRef, useState} from 'react';
-import {Orientation, Subscription} from 'expo-orientation-sensor'
+import {DeviceMotion} from 'expo-sensors'
 import {Audio} from 'expo-av';
 import {Box, Center, HStack, Button, NativeBaseProvider, Switch, Text, ZStack, Hidden} from "native-base";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Subscription } from 'expo-sensors/build/DeviceSensor';
 export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
 
     const side10 = require('../assets/images/side/side20.png');
@@ -52,8 +53,8 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
     const [angles, setAngles] = React.useState({
-        pitch: 0,
-        roll: 0,
+        pitch: 0, //ก้ม เงย
+        roll: 0, // เอียง ซ้ายขวา
     })
 
     const [car, setCar] = React.useState({
@@ -115,12 +116,14 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 
             playbackObject.setIsLoopingAsync(true).then(rl => {
                 if (rl.isLoaded) {
-                    Orientation.setUpdateInterval(200)
-                    subscriber = Orientation.addListener(async data => {
-                            setAngles(data)
-                            if (cal(data) && switchValue) {
+                    DeviceMotion.setUpdateInterval(300)
+                    subscriber = DeviceMotion.addListener(async (data) => {
+                            let pitch = (((data.rotation.beta*2/ Math.PI)*0.9)*100).toFixed(0)
+                            let roll =  (((data.rotation.gamma*2/ Math.PI)*0.9)*100).toFixed(0)
+                            setAngles({roll: roll,pitch: pitch})
+                            if (cal({roll: roll,pitch: pitch}) && switchValue) {
                                 setIsPlaying(true);
-                                setWarnTxt("Roll : "+String(Math.abs((data.roll * 180) / Math.PI).toFixed(2)) + " ,Pitch : " + String(Math.abs((data.pitch * 180) / Math.PI).toFixed(2)))
+                                setWarnTxt("Roll : "+ roll + " ,Pitch : " + pitch)
                                 play().then(r => {
                                     Vibration.vibrate(50)
                                 })
@@ -151,8 +154,8 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 
 
     function cal(data) {
-        let roll = ((data.roll * 180) / Math.PI)
-        let pitch =((data.pitch * 180) / Math.PI)
+        let roll = data.roll
+        let pitch = data.pitch
            if (roll <= 5 && roll >=-5) {
                setSidePic(side0)
            }else if(roll<-5 && roll>=-10){
@@ -177,13 +180,13 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                setSidePic(side90)
            }
         let chkpitch = pitch;
-        if(Platform.OS=="ios"){
-            if(chkpitch>=0){
-                chkpitch = chkpitch - 180;
-            }else{
-                chkpitch = chkpitch + 180;
-            }
-        }
+        // if(Platform.OS=="ios"){
+        //     if(chkpitch>=0){
+        //         chkpitch = chkpitch - 180;
+        //     }else{
+        //         chkpitch = chkpitch + 180;
+        //     }
+        // }
         if (chkpitch <= 5 && chkpitch >=-5) {
             setBackPic(back0)
         }else if(chkpitch<-5 && chkpitch>=-10){
@@ -208,10 +211,10 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
             setBackPic(back90)
         }
         let alarm = false
-        let x6 = car.x6
-        let x8 = car.x8
-        let x10 = car.x10
-        let x9 = car.x9
+        let x6 = car.x6?car.x6:0
+        let x8 = car.x8?car.x8:0
+        let x10 = car.x10?car.x10:0
+        let x9 = car.x9?car.x9:0
         if(hasLoad){
             let aw = car.weight + car.w2
             x6 = (car.weight * ((car.baseWheel-car.x6) + (car.w2*(car.baseWheel+car.x3))))/aw
@@ -301,7 +304,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                                     fontWeight: "700",
                                     fontSize: "xs"
                                 }} position="absolute" bottom="0" px="3" py="1.5">
-                                    {((angles.roll * 180) / Math.PI).toFixed(0)}
+                                    {angles.roll}
                                 </Center>
                             </Box>
                         </Box>
@@ -328,7 +331,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                                     fontWeight: "700",
                                     fontSize: "xs"
                                 }} position="absolute" bottom="0" px="3" py="1.5">
-                                    {((angles.pitch * 180) / Math.PI).toFixed(0)}
+                                    {angles.pitch}
                                 </Center>
                             </Box>
                         </Box>

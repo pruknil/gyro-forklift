@@ -10,6 +10,10 @@
     "preview": {
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "ANDROID_SDK_ROOT": "/Users/kbtgmacbook/Library/Android/sdk",
+        "ANDROID_NDK_HOME": "/Users/kbtgmacbook/Library/Android/sdk/ndk"
       }
     },
     "production": {}

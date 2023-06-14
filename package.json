@@ -1,14 +1,14 @@
 {
   "name": "gyro-forklift",
   "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "REACT_NATIVE_PACKAGER_HOSTNAME=$(ifconfig en0 | grep 'inet ' | awk '{print $2}') expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "apk": "eas build -p android --profile preview --local"
   },
   "jest": {
     "preset": "jest-expo"
@@ -20,9 +20,8 @@
     "@react-navigation/bottom-tabs": "^6.0.5",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.1.0",
-    "@unimodules/core": "~7.2.0",
     "deprecated-react-native-prop-types": "^4.1.0",
-    "expo": "^48.0.0",
+    "expo": "~48.0.18",
     "expo-asset": "~8.9.1",
     "expo-av": "~13.2.1",
     "expo-constants": "~14.2.1",
@@ -30,7 +29,6 @@
     "expo-file-system": "~15.2.2",
     "expo-font": "~11.1.1",
     "expo-linking": "~4.0.1",
-    "expo-orientation-sensor": "^2.1.0",
     "expo-sensors": "~12.1.1",
     "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
