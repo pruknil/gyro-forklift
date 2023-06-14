@@ -349,12 +349,12 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                 <View style={{ flex: 2}}>
                     <HStack alignItems="center" space={2}>
                         <Text fontSize="lg"> {switchValue ? 'Detection ON' : 'Detection OFF'} </Text>
-                        <Switch onValueChange={toggleSwitch} value={switchValue} />
+                        <Switch onToggle={toggleSwitch} value={switchValue} />
                     </HStack>
                     <Text fontSize="lg"> {warnTxt} </Text>
                     <HStack alignItems="center" space={2}>
                         <Text fontSize="lg"> {hasLoad ? 'Load ON' : 'Load OFF'} </Text>
-                        <Switch onValueChange={toggleLoadSwitch} value={hasLoad} />
+                        <Switch onToggle={toggleLoadSwitch} value={hasLoad} />
                     </HStack>
                 </View>
 
