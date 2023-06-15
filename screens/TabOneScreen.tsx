@@ -52,12 +52,12 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     const appState = useRef(AppState.currentState);
     const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
-    const [angles, setAngles] = React.useState({
+    const [angles, setAngles] = React.useState<IData>({
         pitch: 0, //ก้ม เงย
         roll: 0, // เอียง ซ้ายขวา
     })
 
-    const [car, setCar] = React.useState({
+    const [car, setCar] = React.useState<ICar>({
         weight : 0.0,//นน รถโฟล์คลิฟ
         w2 : 0.0,//นนสิ่งของ
         x3:0.0,
@@ -94,17 +94,17 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                 if (typeof value === "string") {
                     let data = JSON.parse(value)
                     setCar({
-                        'weight' : Number(data.weight),//นน รถโฟล์คลิฟ
-                        'w2' : Number(data.w2),//นนสิ่งของ
-                        'x3':Number(data.x3),
-                        'x11':Number(data.x11),
-                        'carWidth':Number(data.carWidth),//x4
-                        'x9':Number(data.x9),
-                        'baseWheel' : Number(data.baseWheel),//x5
-                        'x6':Number(data.x6),
-                        'x10':Number(data.x10),
-                        'height' : Number(data.height),//x7
-                        'x8' : Number(data.x8)})
+                        'weight' : data.weight,//นน รถโฟล์คลิฟ
+                        'w2' : data.w2,//นนสิ่งของ
+                        'x3':data.x3,
+                        'x11':data.x11,
+                        'carWidth':data.carWidth,//x4
+                        'x9':data.x9,
+                        'baseWheel' : data.baseWheel,//x5
+                        'x6':data.x6,
+                        'x10':data.x10,
+                        'height' : data.height,//x7
+                        'x8' : data.x8})
 
                 }
             });
@@ -116,12 +116,16 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
 
             playbackObject.setIsLoopingAsync(true).then(rl => {
                 if (rl.isLoaded) {
-                    DeviceMotion.setUpdateInterval(300)
+                    DeviceMotion.setUpdateInterval(500)
                     subscriber = DeviceMotion.addListener(async (data) => {
                             let pitch = (((data.rotation.beta*2/ Math.PI)*0.9)*100).toFixed(0)
                             let roll =  (((data.rotation.gamma*2/ Math.PI)*0.9)*100).toFixed(0)
-                            setAngles({roll: roll,pitch: pitch})
-                            if (cal({roll: roll,pitch: pitch}) && switchValue) {
+                            let d :IData = {
+                                pitch: Number(pitch), //ก้ม เงย
+                                roll: Number(roll), // เอียง ซ้ายขวา
+                            }
+                            setAngles(d)
+                            if (cal(d) && switchValue) {
                                 setIsPlaying(true);
                                 setWarnTxt("Roll : "+ roll + " ,Pitch : " + pitch)
                                 play().then(r => {
@@ -153,7 +157,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     }, [switchValue,hasLoad]);
 
 
-    function cal(data) {
+    function cal(data: IData) {
         let roll = data.roll
         let pitch = data.pitch
            if (roll <= 5 && roll >=-5) {
@@ -341,8 +345,6 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                                 </ZStack>
                             </Box>
                         }
-
-
                     </Box>
                 </View>
                 <View style={{ flex: 2}}>
@@ -352,7 +354,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                     </HStack>
                     <Text fontSize="lg"> {warnTxt} </Text>
                     <HStack alignItems="center" space={2}>
-                        <Text fontSize="lg"> {hasLoad ? 'Load ON' : 'Load OFF'} </Text>
+                        <Text fontSize="lg"> Load {hasLoad ? 'ON' : 'OFF'} </Text>
                         <Switch onToggle={toggleLoadSwitch} value={hasLoad} />
                     </HStack>
                 </View>
