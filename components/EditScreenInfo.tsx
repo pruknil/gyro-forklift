@@ -114,71 +114,71 @@ export default function EditScreenInfo({ path }: { path: string}) {
             {/*  <Slider.Thumb />*/}
             {/*</Slider>*/}
               <InputGroup>
-                <InputLeftAddon children={"น้ำหนักรถ"} borderStyle={"hidden"} />
+                <InputLeftAddon children={"น้ำหนักรถ"} borderStyle={"solid"} />
                 <Input w={{
                   base: "25%",
                   md: "100%"
                 }} bgColor={"info.100"} value={frmdetails.weight} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, weight:e})} maxLength={5}  />
-                <InputRightAddon children={"Kg"} borderStyle={"hidden"}/>
+                <InputRightAddon children={"Kg"} borderStyle={"solid"}/>
               </InputGroup>
 
                 <InputGroup>
-                  <InputLeftAddon children={"น้ำหนักสิ่งของ"} borderStyle={"hidden"} />
+                  <InputLeftAddon children={"น้ำหนักสิ่งของ"} borderStyle={"solid"} />
                   <Input w={{
                     base: "25%",
                     md: "100%"
                   }} bgColor={"info.100"} value={frmdetails.w2} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, w2:e})} maxLength={5}  />
-                  <InputRightAddon children={"Kg"} borderStyle={"hidden"}/>
+                  <InputRightAddon children={"Kg"} borderStyle={"solid"}/>
                 </InputGroup>
 
                 <InputGroup>
-                  <InputLeftAddon children={"ระยะกึ่งกลางสิ่งของถึงงา"} borderStyle={"hidden"} />
+                  <InputLeftAddon children={"ระยะกึ่งกลางสิ่งของถึงงา"} borderStyle={"solid"} />
                   <Input w={{
                     base: "25%",
                     md: "100%"
                   }} bgColor={"info.100"} value={frmdetails.x3} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, x3:e})} maxLength={5}  />
-                  <InputRightAddon children={"m"} borderStyle={"hidden"}/>
+                  <InputRightAddon children={"m"} borderStyle={"solid"}/>
                 </InputGroup>
 
                 <InputGroup>
-                  <InputLeftAddon children={"ความสูงกึ่งกลางสิ่งของถึงฐานล้อ"} borderStyle={"hidden"} />
+                  <InputLeftAddon children={"ความสูงกึ่งกลางสิ่งของถึงฐานล้อ"} borderStyle={"solid"} />
                   <Input w={{
                     base: "25%",
                     md: "100%"
                   }} bgColor={"info.100"} value={frmdetails.x11} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, x11:e})} maxLength={5}  />
-                  <InputRightAddon children={"m"} borderStyle={"hidden"}/>
+                  <InputRightAddon children={"m"} borderStyle={"solid"}/>
                 </InputGroup>
 
             <InputGroup>
-              <InputLeftAddon children={"ความกว้างของรถ"} borderStyle={"hidden"}/>
+              <InputLeftAddon children={"ความกว้างของรถ"} borderStyle={"solid"}/>
               <Input w={{
                 base: "25%",
                 md: "100%"
               }} bgColor={"info.100"} value={frmdetails.carWidth} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, carWidth:e})} maxLength={5}/>
-              <InputRightAddon children={"m"} borderStyle={"hidden"}/>
+              <InputRightAddon children={"m"} borderStyle={"solid"}/>
             </InputGroup>
 
             <InputGroup>
-              <InputLeftAddon children={"ความยาวฐานล้อหน้า-หลัง"} borderStyle={"hidden"}/>
+              <InputLeftAddon children={"ความยาวฐานล้อหน้า-หลัง"} borderStyle={"solid"}/>
               <Input w={{
                 base: "25%",
                 md: "100%"
               }} bgColor={"info.100"} value={frmdetails.baseWheel} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, baseWheel:e})} maxLength={5}/>
-              <InputRightAddon children={"m"} borderStyle={"hidden"}/>
+              <InputRightAddon children={"m"} borderStyle={"solid"}/>
             </InputGroup>
 
             <InputGroup>
-              <InputLeftAddon children={"ความสูงของรถ"} borderStyle={"hidden"}/>
+              <InputLeftAddon children={"ความสูงของรถ"} borderStyle={"solid"}/>
               <Input w={{
                 base: "25%",
                 md: "100%"
               }} bgColor={"info.100"} value={frmdetails.height} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, height:e})} maxLength={5}/>
-              <InputRightAddon children={"m"} borderStyle={"hidden"}/>
+              <InputRightAddon children={"m"} borderStyle={"solid"}/>
             </InputGroup>
-            {/*<InputGroup borderStyle={"hidden"}>*/}
-            {/*  <InputLeftAddon children={"ระยะจุดกึ่งกลางรถ"} borderStyle={"hidden"} />*/}
+            {/*<InputGroup borderStyle={"solid"}>*/}
+            {/*  <InputLeftAddon children={"ระยะจุดกึ่งกลางรถ"} borderStyle={"solid"} />*/}
             {/*  <Input value={frmdetails.carCenter} placeholder="0" keyboardType={"numeric"} onChangeText={e => setFrmdetails({...frmdetails, carCenter:e})} maxLength={5}/>*/}
-            {/*  <InputRightAddon children={"m"} borderStyle={"hidden"} />*/}
+            {/*  <InputRightAddon children={"m"} borderStyle={"solid"} />*/}
             {/*</InputGroup>*/}
                 <Button m={[5, 0]}  onPress={submitValue}>Calculate</Button>
               </KeyboardAvoidingView>

@@ -58,17 +58,17 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     })
 
     const [car, setCar] = React.useState({
-        weight : 0,//นน รถโฟล์คลิฟ
-        w2 : 0,//นนสิ่งของ
-        x3:0,
-        x11:0,
-        carWidth:0,//x4
-        x9:0,
-        baseWheel : 0,//x5
-        x6:0,
-        x10:0,
-        height : 0,//x7
-        x8 : 0,
+        weight : 0.0,//นน รถโฟล์คลิฟ
+        w2 : 0.0,//นนสิ่งของ
+        x3:0.0,
+        x11:0.0,
+        carWidth:0.0,//x4
+        x9:0.0,
+        baseWheel : 0.0,//x5
+        x6:0.0,
+        x10:0.0,
+        height : 0.0,//x7
+        x8 : 0.0,
     })
 
 
@@ -94,17 +94,17 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                 if (typeof value === "string") {
                     let data = JSON.parse(value)
                     setCar({
-                        'weight' : data.weight,//นน รถโฟล์คลิฟ
-                        'w2' : data.w2,//นนสิ่งของ
-                        'x3':data.x3,
-                        'x11':data.x11,
-                        'carWidth':data.carWidth,//x4
-                        'x9':data.x9,
-                        'baseWheel' : data.baseWheel,//x5
-                        'x6':data.x6,
-                        'x10':data.x10,
-                        'height' : data.height,//x7
-                        'x8' : data.x8})
+                        'weight' : Number(data.weight),//นน รถโฟล์คลิฟ
+                        'w2' : Number(data.w2),//นนสิ่งของ
+                        'x3':Number(data.x3),
+                        'x11':Number(data.x11),
+                        'carWidth':Number(data.carWidth),//x4
+                        'x9':Number(data.x9),
+                        'baseWheel' : Number(data.baseWheel),//x5
+                        'x6':Number(data.x6),
+                        'x10':Number(data.x10),
+                        'height' : Number(data.height),//x7
+                        'x8' : Number(data.x8)})
 
                 }
             });
@@ -216,19 +216,18 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
         let x10 = car.x10?car.x10:0
         let x9 = car.x9?car.x9:0
         if(hasLoad){
-            let aw = car.weight + car.w2
-            x6 = (car.weight * ((car.baseWheel-car.x6) + (car.w2*(car.baseWheel+car.x3))))/aw
+            let aw = Number(car.weight) + Number(car.w2)
+            x6 = car.baseWheel - (((car.weight * (car.baseWheel-car.x6)) + (car.w2 * (Number(car.baseWheel) + Number(car.x3))))/aw)
             x8 = ((car.weight*car.x8) + (car.w2*car.x11))/aw
             x10 = ((car.height-x8)*car.x10)/car.height
             let x5 = ((car.height - x8)*car.baseWheel)/car.height
             let x4 = ((car.height - x8)*car.carWidth)/car.height
             x9 = (x4/x5)*x10
-
-           // console.log(x6,x8,x10,x9)
         }
 
         if(chkpitch > 0){//เอียงขึ้น
             let b = Math.tan(chkpitch* Math.PI/180) * x8
+            //console.log(x8)
             if(b > x10/2){
                 alarm = true
             }
