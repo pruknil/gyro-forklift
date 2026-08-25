@@ -13,7 +13,11 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
+      "url": "https://u.expo.dev/610f6627-4b3c-4c64-af76-65d0a275eeff",
       "fallbackToCacheTimeout": 0
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -35,6 +39,12 @@
       "eas": {
         "projectId": "610f6627-4b3c-4c64-af76-65d0a275eeff"
       }
-    }
+    },
+    "plugins": [
+      "expo-asset",
+      "expo-font",
+      "expo-web-browser",
+      "expo-audio"
+    ]
   }
 }

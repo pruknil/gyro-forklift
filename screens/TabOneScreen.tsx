@@ -2,8 +2,8 @@ import {AppState, StyleSheet, Vibration, Image, Platform} from 'react-native';
 import { View} from '../components/Themed';
 import {RootTabScreenProps} from '../types';
 import React, {useRef, useState} from 'react';
-import {Orientation, Subscription} from 'expo-orientation-sensor'
-import {Audio} from 'expo-av';
+import { DeviceMotion, DeviceMotionMeasurement } from 'expo-sensors';
+import { createAudioPlayer } from 'expo-audio';
 import {Box, Center, HStack, Button, NativeBaseProvider, Switch, Text, ZStack, Hidden} from "native-base";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>) {
@@ -37,8 +37,11 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     const [sidePic, setSidePic] = useState(side0);
     const [backPic, setBackPic] = useState(back0);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [playbackObject, setPlaybackObject] = useState(new Audio.Sound());
-    const [playbackStatus, setPlaybackStatus] = useState(null);
+    const [playbackObject] = useState(() => {
+        const player = createAudioPlayer(require('../assets/beep.mp3'));
+        player.loop = true;
+        return player;
+    });
 
     const [switchValue, setSwitchValue] = useState(false);
     const toggleSwitch = (swVal: any) => {
@@ -74,7 +77,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     const [warnTxt, setWarnTxt] = useState("");
 
     React.useEffect(() => {
-        let subscriber: Subscription
+        let subscriber: ReturnType<typeof DeviceMotion.addListener>
         AppState.addEventListener('change', _handleAppStateChange);
         const focusEvt = navigation.addListener('focus', async () => {
             console.log('Main Focus')
@@ -109,22 +112,24 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
             setAnglesAlert({roll: roll,pitchFront: pitch,pitchBack: pitch})
             console.debug(anglesAlert)
         });
-        playbackObject.loadAsync(require("../assets/beep.mp3")).then(r => {
-            if (r.isLoaded) {
-                setPlaybackStatus(r);
-            }
+        DeviceMotion.setUpdateInterval(200)
+        subscriber = DeviceMotion.addListener((data: DeviceMotionMeasurement) => {
+                            const rotation = data.rotation;
+                            if (rotation === null) {
+                                return;
+                            }
 
-            playbackObject.setIsLoopingAsync(true).then(rl => {
-                if (rl.isLoaded) {
-                    Orientation.setUpdateInterval(200)
-                    subscriber = Orientation.addListener(async data => {
-                            setAngles(data)
-                            if (cal(data) && switchValue) {
+                            const angles = {
+                                pitch: rotation.beta,
+                                roll: rotation.gamma,
+                            };
+                            setAngles(angles)
+                            if (cal(angles) && switchValue) {
 
                                 setIsPlaying(true);
 
 
-                                setWarnTxt("Roll : "+String(Math.abs((data.roll * 180) / Math.PI).toFixed(2)) + " ,Pitch : " + String(Math.abs((data.pitch * 180) / Math.PI).toFixed(2)))
+                                setWarnTxt("Roll : "+String(Math.abs((angles.roll * 180) / Math.PI).toFixed(2)) + " ,Pitch : " + String(Math.abs((angles.pitch * 180) / Math.PI).toFixed(2)))
                                 play().then(r => {
                                     Vibration.vibrate(50)
                                 })
@@ -132,12 +137,8 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
                                 setIsPlaying(false);
                                 pause().then(r => {
                                 })
-                            }
-                        }
-                    )
-                }
-            });
-        });
+                                }
+                            });
         return () => {
             if(subscriber !== undefined){
               //  console.log('Unloading Orientation');
@@ -147,7 +148,7 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
             //
             // }
             //console.log('Unloading Sound');
-            playbackObject.unloadAsync();
+            playbackObject.remove();
             //AppState.removeEventListener('change', _handleAppStateChange);
             //AppState.removeEventListener('focus', focusEvt);
         };
@@ -257,14 +258,12 @@ export default function TabOneScreen({navigation}: RootTabScreenProps<'TabOne'>)
     };
 
     const pause = async () => {
-        const status = await playbackObject.pauseAsync();
-        return setPlaybackStatus(status);
+        playbackObject.pause();
     };
 
 
     const play = async () => {
-        const status = await playbackObject.playAsync();
-        return setPlaybackStatus(status);
+        playbackObject.play();
     };
 
     return (
